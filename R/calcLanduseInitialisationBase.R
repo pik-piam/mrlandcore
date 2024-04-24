@@ -28,7 +28,7 @@ calcLanduseInitialisationBase <- function(cells = "lpjcell", selectyears = "past
       return(toolAggregate(x[getItems(target, dim = "iso"), , ], map, from = "from", to = "to"))
     }
     map <- data.frame(luh = c("c3ann", "c4ann", "c3per", "c4per", "c3nfx", "pastr", "range",
-                                   "primf",      "secdf",    "secdf", "urban",     "primn",     "secdn"),
+                              "primf",      "secdf",    "secdf", "urban",     "primn",     "secdn"),
                       lu  = c("crop",  "crop",  "crop",  "crop",  "crop",  "past", "range",
                               "primforest", "secdforest", "forestry", "urban", "other", "other"))
     lu <- toolAggregate(luh, map, dim = 3)

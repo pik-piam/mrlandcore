@@ -71,9 +71,9 @@ calcCroparea <- function(sectoral = "kcr", physical = TRUE, cellular = FALSE,
 
           if (length(remove) > 0) {
             remainArea <- mean(dimSums(data[, , "remaining.area_harvested"], dim = 1) /
-                                  dimSums(dimSums(data[, , "area_harvested"], dim = 3), dim = 1))
+                                 dimSums(dimSums(data[, , "area_harvested"], dim = 3), dim = 1))
             if (remainArea > 0.02) vcat(1, "Aggregation created a 'remaining' category. The area harvested is",
-                                         round(remainArea, digits = 3) * 100, "% of total \n")
+                                        round(remainArea, digits = 3) * 100, "% of total \n")
             vcat(2, paste0("Data for the following items removed: ", remove))
             data <- data[, , kcr]
           }
@@ -198,7 +198,7 @@ calcCroparea <- function(sectoral = "kcr", physical = TRUE, cellular = FALSE,
                                   cellular = TRUE, irrigation = irrigation,
                                   cells = cells, aggregate = FALSE)
       mag2lpj      <- toolGetMapping(type = "sectoral", name = "MAgPIE_LPJmL.csv",
-                                      where = "mappingfolder")
+                                     where = "mappingfolder")
       mag2lpj      <- mag2lpj[!(mag2lpj$MAgPIE == "pasture"), ]
       lpjCroparea   <- toolAggregate(magCroparea, rel = mag2lpj, from = "MAgPIE", to = "LPJmL", dim = "MAG")
       data          <- lpjCroparea

@@ -85,7 +85,7 @@ calcLUH2MAgPIE <- function(share = "total", bioenergy = "ignore", rice = "non_fl
       # check for countries/years/croptypes where no data is reported from FAO and fill with default values
       noData     <- where(dimSums(x, dim = 3.1) == 0)$true$individual
       meanValues <- dimSums(x * dimSums(aggregation, dim = "LUH"), dim = "ISO") /
-                    dimSums(aggregation, dim = c("ISO", "LUH"))
+        dimSums(aggregation, dim = c("ISO", "LUH"))
       meanValues[is.nan(meanValues)] <- 0
       for (i in row(noData)[, 1]) {
         x[noData[i, "ISO"], noData[i, "Year"], noData[i, "MAG"]]  <- meanValues[, noData[i, "Year"], noData[i, "MAG"]]
@@ -123,7 +123,7 @@ calcLUH2MAgPIE <- function(share = "total", bioenergy = "ignore", rice = "non_fl
       # check for countries/years/croptypes where no data is reported from FAO and fill with default values
       noData       <- where(dimSums(x, dim = 3.2) == 0)$true$individual
       meanValues   <- dimSums(x * dimSums(aggregation, dim = "MAG"), dim = "ISO") /
-                      dimSums(aggregation, dim = c("ISO", "MAG"))
+        dimSums(aggregation, dim = c("ISO", "MAG"))
       for (i in row(noData)[, 1]) {
         x[noData[i, "ISO"], noData[i, "Year"], noData[i, "LUH"]]  <- meanValues[, noData[i, "Year"], noData[i, "LUH"]]
       }

@@ -60,7 +60,7 @@ readLPJmL <- function(subtype = "LPJmL5:CRU4p02.soilc") { # nolint: cyclocomp_li
              vegc_grass         = "mean_vegc_mangrass.bin",
              litc_grass         = "litc_mangrass.bin",
              soilc_grass        = "soilc_mangrass.bin"
-             )
+  )
 
   filename <- toolSubtypeSelect(subtype, files)
 
@@ -358,7 +358,7 @@ readLPJmL <- function(subtype = "LPJmL5:CRU4p02.soilc") { # nolint: cyclocomp_li
       class(x)     <- "array"
       x            <- collapseNames(as.magpie(x, spatial = 1))
       mapLPJcell <- toolGetMapping("LPJ_CellBelongingsToCountries.csv",
-                                     type = "cell", where = "mrcommons")
+                                   type = "cell", where = "mrcommons")
       getCells(x)  <- paste(mapLPJcell$ISO, 1:67420, sep = ".")
       names(dimnames(x))[1] <- paste0(names(dimnames(x))[1], ".region")
 

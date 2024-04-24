@@ -87,7 +87,7 @@ toolForestRelocate <- function(lu, luCountry, natTarget, vegC) { # nolint
           fullremoval <- (round(dimSums(l[[iso]], dim = 1)[, , cat] + as.magpie(catreduce), 3) == 0)
           if (any(fullremoval)) {
             allocate[, fullremoval, ] <- (allocate[, fullremoval, ]
-                                                        + setNames(l[[iso]][, fullremoval, cat], NULL))
+                                          + setNames(l[[iso]][, fullremoval, cat], NULL))
             l[[iso]][, fullremoval, cat] <- 0
             catreduce[fullremoval] <- 0
           }
@@ -115,7 +115,7 @@ toolForestRelocate <- function(lu, luCountry, natTarget, vegC) { # nolint
               if (msg %in% criticalWarnings) {
 
                 vcat(2, paste0("No solution for ", iso, ", ", cat, ", ", msg, ".",
-                     "Restart from higher intial guess."))
+                               "Restart from higher intial guess."))
 
                 sol  <- nleqslv(rep(10^10, nyears(l[[iso]][, ti, ])), findweight,
                                 cellarea = t(.arrayReduce(l[[iso]][, ti, cat])),
@@ -225,7 +225,7 @@ toolForestRelocate <- function(lu, luCountry, natTarget, vegC) { # nolint
   .checkCellArea(lu, luCellArea)
 
   error <- abs(toolCountryFill(dimSums(lu[, , nature], dim = c("x", "y")),
-                                fill = 0, verbosity = 2) - natTarget)
+                               fill = 0, verbosity = 2) - natTarget)
   if (max(error) > 10e-4) {
     country <- rownames(which(error == max(error), arr.ind = TRUE))
     warning("Missmatch between computed and target land use (max error = ", max(error), " in ", country, ")")

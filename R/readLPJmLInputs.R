@@ -18,25 +18,25 @@
 
 readLPJmLInputs <- function(subtype = "lakeshare") {
 
-  files <- c(lakeshare  = "glwd_lakes_and_rivers.bin")
-  file  <- toolSubtypeSelect(subtype, files)
+   files <- c(lakeshare  = "glwd_lakes_and_rivers.bin")
+   file  <- toolSubtypeSelect(subtype, files)
 
-  # Data settings
-  if (subtype %in% c("lakeshare")) {
+   # Data settings
+   if (subtype %in% c("lakeshare")) {
 
-       unitTrans       <- 0.01
-       ncells          <- 67420
-       wyears          <- 1
-       syear           <- 1
-       avgRange        <- NULL
-       filetype       <- "bin"
-       bands           <- 1
-       datatype        <- integer()
-       bytes           <- 1
-       monthly         <- FALSE
-  }
+      unitTrans       <- 0.01
+      ncells          <- 67420
+      wyears          <- 1
+      syear           <- 1
+      avgRange        <- NULL
+      filetype       <- "bin"
+      bands           <- 1
+      datatype        <- integer()
+      bytes           <- 1
+      monthly         <- FALSE
+   }
 
-  # Read in the data
+   # Read in the data
    x <- readLPJ(file_name       = file,
                 wyears          = wyears,
                 syear           = syear,

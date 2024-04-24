@@ -34,10 +34,10 @@ calcLanduseInitialisation <- function(cellular = FALSE, nclasses = "seven",
 
   if (isFALSE(cellular)) {
     out <- calcOutput("LanduseInitialisationBase", cells = "lpjcell",
-                       selectyears = selectyears, aggregate = FALSE)
+                      selectyears = selectyears, aggregate = FALSE)
     out <- toolCountryFill(dimSums(out,
-                                  dim = c("x", "y")),
-                          fill = 0, verbosity = 2)
+                                   dim = c("x", "y")),
+                           fill = 0, verbosity = 2)
   } else {
     out <- calcOutput("LanduseInitialisationBase", cells = cells,
                       selectyears = selectyears, aggregate = FALSE)

@@ -165,8 +165,8 @@ readLPJmLClimateInput <- function(subtype = "ISIMIP3bv2:MRI-ESM2-0:ssp370:temper
       years    <- intersect(years, subYears)
       if (any(!(subYears %in% years))) {
         warning(paste0("Some subsetted years (subset = ", subset,
-                ") are not availabl\n in the original data.\n",
-                "Years set to:", years))
+                       ") are not availabl\n in the original data.\n",
+                       "Years set to:", years))
       }
 
       x <- lpjclass::read.LPJ_input(file_name   = filename,
