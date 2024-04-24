@@ -16,7 +16,24 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Kristine Karstens \email{karstens@pik-potsdam.de}
+\strong{Maintainer}: Felicitas Beier \email{beier@pik-potsdam.de}
+
+Authors:
+\itemize{
+  \item Kristine Karstens
+  \item Marcos Alves
+  \item Jan Philipp Dietrich
+  \item Benjamin Leon Bodirsky
+  \item David Hoetten
+  \item Florian Humpenoeder
+  \item Jens Heinke
+  \item Patrick v. Jeetze
+  \item Abhijeet Mishra
+  \item Felcitas Beier
+  \item Stephen Wirth
+  \item David Chen
+  \item Ulrich Kreidenweis
+}
 
 }
 \keyword{internal}
