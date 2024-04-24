@@ -40,13 +40,13 @@ correctLUH2v2 <- function(x, subtype) {
       # correct for negative values if secondary forest is exceeded
       secdfNegative <- (x["JPN", buggedYears, "secdf"] < 0)
       x["JPN", buggedYears, "pastr"][secdfNegative] <- x["JPN", buggedYears, "pastr"][secdfNegative] +
-                                                        x["JPN", buggedYears, "secdf"][secdfNegative]
+        x["JPN", buggedYears, "secdf"][secdfNegative]
       x["JPN", buggedYears, "secdf"][secdfNegative] <- 0
 
       # correct potentially newly introduced negative values in rangelands
       pastrNegative <- (x["JPN", buggedYears, "pastr"] < 0)
       x["JPN", buggedYears, "range"][pastrNegative] <- x["JPN", buggedYears, "range"][pastrNegative] +
-                                                        x["JPN", buggedYears, "pastr"][pastrNegative]
+        x["JPN", buggedYears, "pastr"][pastrNegative]
       x["JPN", buggedYears, "pastr"][pastrNegative] <- 0
       x["JPN", buggedYears, "range"][x["JPN", buggedYears, "range"] < 0] <- 0
 

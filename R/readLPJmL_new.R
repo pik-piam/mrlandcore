@@ -44,10 +44,10 @@ readLPJmL_new <- function(subtype = "LPJmL4_for_MAgPIE_44ac93de:GSWP3-W5E5:histo
                        encoding = getOption("encoding"))
       seek(filedata, where = 15, origin = "start")
       inHeader <- as.numeric(readBin(filedata,
-                                      what = integer(),
-                                      size = 4,
-                                      n = 5,
-                                      endian = .Platform$endian))
+                                     what = integer(),
+                                     size = 4,
+                                     n = 5,
+                                     endian = .Platform$endian))
       startYear <- inHeader[1]
       nyear     <- inHeader[2]
       nbands    <- inHeader[5] # nbands will be overwritten for clm data
@@ -81,16 +81,16 @@ readLPJmL_new <- function(subtype = "LPJmL4_for_MAgPIE_44ac93de:GSWP3-W5E5:histo
     }
 
     x <- readLPJ(file_name        = filename,
-                  wyears          = years,
-                  syear           = startYear,
-                  headlines       = headlines,
-                  averaging_range = 1,
-                  ncells          = 67420,
-                  file_type       = "bin",
-                  bands           = nbands,
-                  datatype        = datatype,
-                  bytes           = bytes,
-                  monthly         = monthly)
+                 wyears          = years,
+                 syear           = startYear,
+                 headlines       = headlines,
+                 averaging_range = 1,
+                 ncells          = 67420,
+                 file_type       = "bin",
+                 bands           = nbands,
+                 datatype        = datatype,
+                 bytes           = bytes,
+                 monthly         = monthly)
 
     class(x) <- "array"
     x        <- collapseNames(as.magpie(x, spatial = 1))
