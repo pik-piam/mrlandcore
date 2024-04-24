@@ -20,6 +20,7 @@
 #' @importFrom magpiesets addLocation
 #' @importFrom lpjclass readLPJ
 #' @importFrom stringr str_subset str_trim str_split
+#' @importFrom dplyr %>%
 
 readLPJmL_new <- function(subtype = "LPJmL4_for_MAgPIE_44ac93de:GSWP3-W5E5:historical:soilc") { # nolint
 

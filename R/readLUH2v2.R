@@ -8,7 +8,7 @@
 #' Jan Philipp Dietrich, Patrick v. Jeetze
 #'
 #' @importFrom ncdf4 nc_open
-#' @importFrom terra rast ext subset aggregate project ext<-
+#' @importFrom terra rast ext subset aggregate project ext<- terraOptions
 #' @importFrom magclass as.magpie mbind
 #' @importFrom withr local_tempdir defer
 #' @importFrom stringr str_match str_count str_subset

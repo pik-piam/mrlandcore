@@ -2,13 +2,39 @@ cff-version: 1.2.0
 message: If you use this software, please cite it using the metadata from this file.
 type: software
 title: 'mrlandcore: One-line description of this awesome package'
-version: 0.0.1.9001
+version: 0.1.0
 date-released: '2024-04-24'
 abstract: One-paragraph description of this awesome package.
 authors:
+- family-names: Beier
+  given-names: Felicitas
+  email: beier@pik-potsdam.de
 - family-names: Karstens
   given-names: Kristine
-  email: karstens@pik-potsdam.de
+- family-names: Alves
+  given-names: Marcos
+- family-names: Philipp Dietrich
+  given-names: Jan
+- family-names: Leon Bodirsky
+  given-names: Benjamin
+- family-names: Hoetten
+  given-names: David
+- family-names: Humpenoeder
+  given-names: Florian
+- family-names: Heinke
+  given-names: Jens
+- family-names: v. Jeetze
+  given-names: Patrick
+- family-names: Mishra
+  given-names: Abhijeet
+- family-names: Beier
+  given-names: Felcitas
+- family-names: Wirth
+  given-names: Stephen
+- family-names: Chen
+  given-names: David
+- family-names: Kreidenweis
+  given-names: Ulrich
 license: LGPL-3.0
 repository-code: https://github.com/pik-piam/mrlandcore
 

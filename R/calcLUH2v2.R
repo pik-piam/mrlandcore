@@ -22,6 +22,7 @@
 #' calcOutput("LUH2v2")
 #' }
 #' @importFrom magclass getNames
+#' @importFrom mstools toolConv2CountryByCelltype
 #' @importFrom magpiesets findset
 
 calcLUH2v2 <- function(landuse_types = "magpie", irrigation = FALSE, # nolint
