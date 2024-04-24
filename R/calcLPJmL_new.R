@@ -233,7 +233,7 @@ calcLPJmL_new <- function(version = "LPJmL4_for_MAgPIE_44ac93de", # nolint
     baseline2020    <- baseline2020$x
 
     if (cfg$climatetype    == cfg$baseline_gcm &&
-        cfg$readin_version == cfg$baseline_version) {
+          cfg$readin_version == cfg$baseline_version) {
 
       out <- baseline2020
 
@@ -249,12 +249,11 @@ calcLPJmL_new <- function(version = "LPJmL4_for_MAgPIE_44ac93de", # nolint
     stop("Stage argument not supported!")
   }
 
-  return(list(
-    x            = out,
-    weight       = NULL,
-    unit         = unit,
-    min          = 0,
-    description  = paste0("Output from LPJmL (", subtype, ") for ",
-                          version, " and ", climatetype, " at stage: ", stage, "."),
-    isocountries = FALSE))
+  return(list(x            = out,
+              weight       = NULL,
+              unit         = unit,
+              min          = 0,
+              description  = paste0("Output from LPJmL (", subtype, ") for ",
+                                    version, " and ", climatetype, " at stage: ", stage, "."),
+              isocountries = FALSE))
 }

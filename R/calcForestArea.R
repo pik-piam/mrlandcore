@@ -114,7 +114,7 @@ calcForestArea <- function(selectyears = "past") {
   out <- toolAggregate(forest, map, from = "fao", to = "magpie", dim = 3)
 
   if (max(abs(dimSums(out[, , c("natrforest", "forestry")]) - out[, , "forest"])) > 10^-6 ||
-      max(abs(dimSums(out[, , c("secdforest", "primforest")], dim = 3) - out[, , "natrforest"])) > 10^-6) {
+        max(abs(dimSums(out[, , c("secdforest", "primforest")], dim = 3) - out[, , "natrforest"])) > 10^-6) {
     warning("There are inconsistencies within the forest area data set.")
   }
 

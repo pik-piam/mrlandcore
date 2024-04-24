@@ -25,9 +25,9 @@ correctLUH2v2 <- function(x, subtype) {
   years <- getYears(x, as.integer = TRUE)
 
   if (grepl("states", subtype) &&
-      length(intersect(2001:2015, years)) > 0 &&
-      2000 %in% years &&
-      2005 %in% years) {
+        length(intersect(2001:2015, years)) > 0 &&
+        2000 %in% years &&
+        2005 %in% years) {
     # check, if in JPN pasture+rangeland is unnaturally low
     if (sum(x["JPN", "y2005", c("pastr", "range")]) < 0.01) {
       # if so correct all years since 2001 (first year of buggy data)
