@@ -1,7 +1,7 @@
 Type: Package
 Package: mrlandcore
 Title: One-line description of this awesome package
-Version: 0.0.1
+Version: 0.0.1.9001
 Date: 2024-04-24
 Authors@R:
     person("Kristine", "Karstens", , "karstens@pik-potsdam.de", role = c("aut", "cre"))
@@ -11,4 +11,4 @@ URL: https://github.com/pik-piam/mrlandcore
 Suggests:
     testthat
 Encoding: UTF-8
-RoxygenNote: 7.2.1
+RoxygenNote: 7.3.1

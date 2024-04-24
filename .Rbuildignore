@@ -1,0 +1,6 @@
+^\.buildlibrary$
+^\.pre-commit-config\.yaml$
+^Makefile$
+^workflow$
+^.*CITATION.cff$
+^\.github$
