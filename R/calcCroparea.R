@@ -27,6 +27,8 @@
 #' @importFrom magclass setNames getCells collapseDim getItems
 #' @importFrom magpiesets findset addLocation
 #' @importFrom madrat toolAggregate toolGetMapping
+#' @importFrom mrfaocore toolExtrapolateFodder toolFAOcombine
+#' @importFrom utils person
 #' @importFrom withr local_options
 
 calcCroparea <- function(sectoral = "kcr", physical = TRUE, cellular = FALSE,
