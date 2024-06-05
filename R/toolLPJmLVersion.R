@@ -19,7 +19,7 @@ toolLPJmLVersion <- function(version, climatetype) {
   cfg$baseline_hist    <- "GSWP3-W5E5:historical"
   cfg$ref_year_hist    <- "y2010"
   cfg$baseline_gcm     <- "MRI-ESM2-0:ssp370"
-  cfg$ref_year_gcm     <- "y2020"
+  cfg$ref_year_gcm     <- "y2025"
   cfg$readin_version   <- version
   cfg$baseline_version <- version
   cfg$climatetype      <- climatetype
