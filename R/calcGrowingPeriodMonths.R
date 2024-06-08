@@ -65,7 +65,7 @@ calcGrowingPeriodMonths <- function(selectyears, lpjml, climatetype,
   if (any(grper < 0)) {
     stop("mrland::calcGrowingPeriodMonths produced negative values")
   }
-  if (any(grper != 1 && grper != 0)) {
+  if (any(grper != 1) && any(grper != 0)) {
     stop("Problem in mrland::calcGrowingPeriodMonths: Value should be 0 or 1!")
   }
 
