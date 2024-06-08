@@ -125,7 +125,7 @@ calcMulticroppingSuitability <- function(selectyears, lpjml, climatetype,
   if (any(suitMC < 0)) {
     stop("calcMulticroppingSuitability produced negative values")
   }
-  if (any(suitMC != 1 && suitMC != 0)) {
+  if (!all(suitMC %in% c(0, 1))) {
     stop("Problem in calcMulticroppingSuitability: Value should be 0 or 1!")
   }
 
