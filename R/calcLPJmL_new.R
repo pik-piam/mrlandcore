@@ -56,14 +56,14 @@ calcLPJmL_new <- function(version = "LPJmL4_for_MAgPIE_44ac93de", # nolint
 
     if (!grepl("historical", cfg$climatetype)) {
 
-      x     <- mbind(readSource("LPJmL_new", subtype = readinHist, convert = FALSE),
-                     readSource("LPJmL_new", subtype = readinName, convert = FALSE))
+      x     <- mbind(readSource("LPJmL_new", subtype = readinHist, convert = "onlycorrect"),
+                     readSource("LPJmL_new", subtype = readinName, convert = "onlycorrect"))
       years <- getYears(x, as.integer = TRUE)
       x     <- x[, years[years >= 1951], ]
 
     } else {
 
-      x     <- readSource("LPJmL_new", subtype = readinName, convert = FALSE)
+      x     <- readSource("LPJmL_new", subtype = readinName, convert = "onlycorrect")
       years <- getYears(x, as.integer = TRUE)
       if (!grepl("1901", stage)) x <- x[, years[years >= 1930], ]
 
