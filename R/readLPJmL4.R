@@ -1,18 +1,16 @@
-#' @title readLPJmL
+#' @title readLPJmL4
 #' @description Read LPJmL content
 #' @param subtype Switch between different input
 #' @return List of magpie objects with results on cellular level, weight, unit and description.
 #' @author Kristine Karstens, Abhijeet Mishra, Felicitas Beier
-#' @seealso
-#' [readLPJ()]
 #' @examples
 #' \dontrun{
-#' readSource("LPJmL", subtype = "LPJmL5:CRU4p02.soilc", convert = "onlycorrect")
+#' readSource("LPJmL4", subtype = "LPJmL5:CRU4p02.soilc", convert = "onlycorrect")
 #' }
 #'
 #' @importFrom lpjclass readLPJ
 
-readLPJmL <- function(subtype = "LPJmL5:CRU4p02.soilc") { # nolint: cyclocomp_linter.
+readLPJmL4 <- function(subtype = "LPJmL5:CRU4p02.soilc") { # nolint: cyclocomp_linter.
 
   if (grepl("\\.", subtype)) {
 

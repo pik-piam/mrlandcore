@@ -4,10 +4,10 @@
 #'
 #' @author Kristine Karstens
 #' @seealso
-#' [readLPJmL()]
+#' [readLPJmL_new()]
 #' @examples
 #' \dontrun{
-#' readSource("LPJmL", convert = "onlycorrect")
+#' readSource("LPJmL_new", convert = "onlycorrect")
 #' }
 #'
 #' @importFrom madrat toolConditionalReplace

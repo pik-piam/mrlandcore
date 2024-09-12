@@ -14,12 +14,12 @@ Convert LPJmL content (dummy function)
 }
 \examples{
 \dontrun{
-readSource("LPJmL", convert = "onlycorrect")
+readSource("LPJmL_new", convert = "onlycorrect")
 }
 
 }
 \seealso{
-[readLPJmL()]
+[readLPJmL_new()]
 }
 \author{
 Kristine Karstens

@@ -1,4 +1,4 @@
-#' @title calcLPJmL
+#' @title calcLPJmL4
 #' @description Handle LPJmL data and its time behaviour (averaging, approximation, harmonizing to baseline)
 #'
 #' @param version Switch between LPJmL4 and LPJmL4
@@ -17,18 +17,9 @@
 #'
 #' @return List of magpie objects with results on cellular level, weight, unit and description.
 #' @author Kristine Karstens, Felicitas Beier
-#' @seealso
-#' [readLPJmL()]
-#' @examples
-#' \dontrun{
-#' calcOutput("LPJmL", version = "LPJmL4", climatetype = "CRU_4", subtype = "soilc", aggregate = FALSE)
-#' }
-#'
-#'
-#'
 # nolint start
 # deprecated soon
-calcLPJmL <- function(version = "LPJmL4", climatetype = "CRU_4", subtype = "soilc", subdata = NULL, time = "raw", averaging_range = NULL, dof = NULL,
+calcLPJmL4 <- function(version = "LPJmL4", climatetype = "CRU_4", subtype = "soilc", subdata = NULL, time = "raw", averaging_range = NULL, dof = NULL,
                       harmonize_baseline = FALSE, ref_year = "y2015", limited = TRUE, hard_cut = FALSE, selectyears = "all") {
 
   if (limited) {
@@ -42,10 +33,10 @@ calcLPJmL <- function(version = "LPJmL4", climatetype = "CRU_4", subtype = "soil
     if (harmonize_baseline == climatetype) stop("Climatetype and baseline are identical.")
 
     # read in historical data for subtype
-    x           <- calcOutput("LPJmL", version = version, climatetype = climatetype, subtype = subtype, subdata = subdata, time = time,
+    x           <- calcOutput("LPJmL4", version = version, climatetype = climatetype, subtype = subtype, subdata = subdata, time = time,
                               averaging_range = averaging_range, dof = dof, harmonize_baseline = FALSE, aggregate = FALSE)
 
-    Baseline    <- calcOutput("LPJmL", version = version, climatetype = harmonize_baseline, subtype = subtype, subdata = subdata, time = time,
+    Baseline    <- calcOutput("LPJmL4", version = version, climatetype = harmonize_baseline, subtype = subtype, subdata = subdata, time = time,
                               averaging_range = averaging_range, dof = dof, harmonize_baseline = FALSE, aggregate = FALSE)
     # harmonize to baseline
     LPJmL_input <- toolHarmonize2Baseline(x, Baseline,  ref_year = ref_year, method = method, hard_cut = hard_cut)
@@ -53,7 +44,7 @@ calcLPJmL <- function(version = "LPJmL4", climatetype = "CRU_4", subtype = "soil
   } else {
 
     readin_name <- paste0(version, ":", climatetype, ".", subtype)
-    LPJmL_input <- readSource("LPJmL", subtype = readin_name, convert = "onlycorrect")
+    LPJmL_input <- readSource("LPJmL4", subtype = readin_name, convert = "onlycorrect")
 
     if (!is.null(subdata)) {
       if (!all(subdata %in% getNames(LPJmL_input))) stop(paste0("Subdata items '", subdata, "' are not part of selected LPJmL subtype!"))
