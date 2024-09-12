@@ -1,4 +1,4 @@
-#' @title downloadLPJmLClimateInput
+#' @title downloadLPJmLClimateInput_new
 #' @description Download GCM climate input used for LPJmL runs
 #'
 #' @param subtype Switch between different inputs (e.g. "ISIMIP3b:IPSL-CM6A-LR:historical:1850-2014:temperature")
@@ -9,10 +9,10 @@
 #' @author Marcos Alves, Kristine Karstens
 #' @examples
 #' \dontrun{
-#' readSource("LPJmLClimateInput", convert = "onlycorrect")
+#' readSource("LPJmLClimateInput_new", convert = "onlycorrect")
 #' }
 #'
-downloadLPJmLClimateInput <- function(subtype = "ISIMIP3bv2:MRI-ESM2-0:ssp370:temperature") { # nolint
+downloadLPJmLClimateInput_new <- function(subtype = "ISIMIP3bv2:MRI-ESM2-0:ssp370:temperature") { # nolint
 
   x <- toolSplitSubtype(subtype, list(version = NULL, climatemodel = NULL,
                                       scenario = NULL, variable = NULL))

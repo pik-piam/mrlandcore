@@ -1,4 +1,4 @@
-#' @title readLPJmLClimateInput
+#' @title readLPJmLClimateInput_new
 #' @description Read Climate data used as LPJmL inputs into MAgPIE objects
 #' @param subtype Switch between different inputs,
 #'                e.g. "ISIMIP3bv2:MRI-ESM2-0:ssp370:1850-2014:tas"
@@ -13,10 +13,10 @@
 #' @return MAgPIE objects with results on cellular level.
 #' @author Marcos Alves, Kristine Karstens, Felicitas Beier
 #' @seealso
-#' \code{\link{readLPJmLClimateInput}}
+#' \code{\link{readLPJmLClimateInput_new}}
 #' @examples
 #' \dontrun{
-#' readSource("LPJmLClimateInput", subtype, convert = "onlycorrect")
+#' readSource("LPJmLClimateInput_new", subtype, convert = "onlycorrect")
 #' }
 #'
 #' @importFrom lpjclass read.LPJ_input
@@ -25,8 +25,8 @@
 #' @importFrom magclass collapseNames collapseDim as.magpie clean_magpie
 #' @export
 
-readLPJmLClimateInput <- function(subtype = "ISIMIP3bv2:MRI-ESM2-0:ssp370:temperature", # nolint
-                                  subset  = "annualMean") {
+readLPJmLClimateInput_new <- function(subset  = "annualMean", # nolint: object_name_linter.
+                                      subtype = "ISIMIP3bv2:MRI-ESM2-0:ssp370:temperature") {
 
   nCells  <- 67420 # number of cells in lpjml
   subtype <- toolSplitSubtype(subtype,
@@ -69,7 +69,7 @@ readLPJmLClimateInput <- function(subtype = "ISIMIP3bv2:MRI-ESM2-0:ssp370:temper
       close(filedata)
 
     } else {
-      stop("File format of LPJmLClimateInput data unknown. Please provide .clm file format.")
+      stop("File format of LPJmLClimateInput_new data unknown. Please provide .clm file format.")
     }
 
     if (subset == "wetDaysMonth") {
