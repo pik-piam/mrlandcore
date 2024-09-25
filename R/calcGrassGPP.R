@@ -24,7 +24,7 @@
 
 calcGrassGPP <- function(selectyears, lpjml, climatetype, season) {
 
-  if (grepl("GSWP3-W5E5", climatetype)) {
+  if (grepl("historical", climatetype)) {
     stage <- "smoothed"
   } else {
     stage <- "harmonized2020"
