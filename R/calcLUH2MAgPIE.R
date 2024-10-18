@@ -40,7 +40,7 @@ calcLUH2MAgPIE <- function(share = "total", bioenergy = "ignore", rice = "non_fl
     }
 
     kcr         <- findset("kcr")
-    mapping     <- toolGetMapping("FAO2LUH2MAG_croptypes.csv", type = "sectoral", where = "mrcommons")
+    mapping     <- toolGetMapping("FAO2LUH2MAG_croptypes.csv", type = "sectoral", where = "mrlandcore")
 
     aggregation <- toolAggregate(FAOdata, rel = mapping, from = "ProductionItem",
                                  to = "LUH2kcr", dim = 3.1, partrel = TRUE)
