@@ -46,7 +46,7 @@ calcCroparea <- function(sectoral = "kcr", physical = TRUE, cellular = FALSE,
 
     if (!is.null(sectoral) && !(sectoral == "lpj")) {
 
-      cropPrim <- readSource("FAO_online", "Crop")[, , "area_harvested"]
+      cropPrim <- readSource("FAO_online", "CropLive2010")[, , "area_harvested"]
       # use linear_interpolate
       fodder   <- readSource("FAO", "Fodder")[, , "area_harvested"]
       fodder   <- toolExtrapolateFodder(fodder, endyear = max(getYears(cropPrim, as.integer = TRUE)))
@@ -54,8 +54,8 @@ calcCroparea <- function(sectoral = "kcr", physical = TRUE, cellular = FALSE,
 
       if (sectoral %in% c("FoodBalanceItem", "kcr")) {
 
-        aggregation <- toolGetMapping("FAOitems_online.csv", type = "sectoral",
-                                      where = "mappingfolder")
+        aggregation <- toolGetMapping("FAOitems_1124Update.csv", type = "sectoral",
+                                      where = "mrfaocore")
         remove      <- setdiff(getNames(data, dim = 1), aggregation$ProductionItem)
         data        <- data[, , remove, invert = TRUE]
         data        <- toolAggregate(data, rel = aggregation, from = "ProductionItem",
@@ -72,7 +72,7 @@ calcCroparea <- function(sectoral = "kcr", physical = TRUE, cellular = FALSE,
           remove <- setdiff(getItems(data, dim = 3.1), kcr)
 
           if (length(remove) > 0) {
-            remainArea <- mean(dimSums(data[, , "remaining.area_harvested"], dim = 1) /
+            remainArea <- mean(dimSums(data[, , "area_harvested"][,,remove], dim = 1) /
                                  dimSums(dimSums(data[, , "area_harvested"], dim = 3), dim = 1))
             if (remainArea > 0.02) vcat(1, "Aggregation created a 'remaining' category. The area harvested is",
                                         round(remainArea, digits = 3) * 100, "% of total \n")
