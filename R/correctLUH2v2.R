@@ -51,8 +51,8 @@ correctLUH2v2 <- function(x, subtype) {
       x["JPN", buggedYears, "range"][x["JPN", buggedYears, "range"] < 0] <- 0
 
     } else {
-      stop("it seems the Japan bug in LUH2v2 has been removed.
-           Please remove the bugfix in correct LUH2v2 before proceeding!")
+      message("it seems the Japan bug in LUH2v2 has been removed. ",
+              "Please remove the bugfix in correct LUH2v2 before proceeding!")
     }
   }
 
