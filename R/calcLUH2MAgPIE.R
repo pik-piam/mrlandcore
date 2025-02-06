@@ -36,7 +36,7 @@ calcLUH2MAgPIE <- function(share = "total", bioenergy = "ignore", rice = "non_fl
       # Rice areas are pre-determined by areas reported as flooded in LUH.
       # All additional rice areas (according to FAO) are allocated using FAO data
       nonfloodedShr                 <- calcOutput("Ricearea", cellular = FALSE, share = TRUE, aggregate = FALSE)
-      FAOdata[, , "27|Rice, paddy"] <- FAOdata[, , "27|Rice, paddy"] * nonfloodedShr # nolint : object_name_linter.
+      FAOdata[, , "27|Rice"] <- FAOdata[, , "27|Rice"] * nonfloodedShr # nolint : object_name_linter.
     }
 
     kcr         <- findset("kcr")
