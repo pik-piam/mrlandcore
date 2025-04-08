@@ -1,8 +1,8 @@
 Type: Package
 Package: mrlandcore
 Title: One-line description of this awesome package
-Version: 1.2.1
-Date: 2025-02-04
+Version: 1.2.2
+Date: 2025-04-08
 Authors@R: c(
     person("Felicitas", "Beier", , "beier@pik-potsdam.de", role = c("aut", "cre")),
     person("Kristine", "Karstens", role = "aut"),
