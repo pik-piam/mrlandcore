@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: If you use this software, please cite it using the metadata from this file.
 type: software
 title: 'mrlandcore: One-line description of this awesome package'
-version: 1.2.1
-date-released: '2025-02-04'
+version: 1.2.2
+date-released: '2025-04-08'
 abstract: One-paragraph description of this awesome package.
 authors:
 - family-names: Beier

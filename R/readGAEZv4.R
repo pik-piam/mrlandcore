@@ -16,7 +16,7 @@ readGAEZv4 <- function(subtype = "MCzones") {
 
   # Transform from 0.08 to 0.5 spatial resolution and convert to magpie object
   .transformObject <- function(x) {
-    x <- brick(projectRaster(from = x, to = raster(res = 0.5), method = "ngb", over = TRUE))
+    x <- brick(projectRaster(from = x, to = raster(resolution = 0.5), method = "ngb", over = TRUE))
     x <- as.magpie(x)
     return(x)
   }
