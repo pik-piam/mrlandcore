@@ -72,6 +72,7 @@ calcForestArea <- function(selectyears = "past_til2020") {
 
   luh <- calcOutput("LUH2v2", landuse_types = "LUH2v2", irrigation = FALSE, selectyears = selectyears,
                     cells = "lpjcell", cellular = FALSE, aggregate = FALSE)[, , c("primf", "secdf")]
+  forest <- forest[, getYears(luh), ]
 
   secondaryForest <- luh[, , "secdf"] - setNames(forest[, getYears(luh), "PlantFor"], NULL)
   if (any(secondaryForest < 0)) {
