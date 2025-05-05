@@ -8,7 +8,7 @@ calcLanduseInitialisation(
   cellular = FALSE,
   nclasses = "seven",
   cells = "lpjcell",
-  selectyears = "past",
+  selectyears = "past_til2020",
   input_magpie = FALSE
 )
 }

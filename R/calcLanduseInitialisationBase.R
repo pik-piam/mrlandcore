@@ -12,7 +12,7 @@
 #' \dontrun{
 #' calcOutput("LanduseInitialisationBase")
 #' }
-calcLanduseInitialisationBase <- function(cells = "lpjcell", selectyears = "past") {
+calcLanduseInitialisationBase <- function(cells = "lpjcell", selectyears = "past_til2020") {
 
   selectyears <- sort(findset(selectyears, noset = "original"))
 
@@ -84,7 +84,9 @@ calcLanduseInitialisationBase <- function(cells = "lpjcell", selectyears = "past
 
   vegC  <- calcOutput("LPJmL_new", subtype = "vegc", stage = "smoothed",
                       version = "LPJmL4_for_MAgPIE_44ac93de", climatetype = "GSWP3-W5E5:historical",
-                      aggregate = FALSE)[, selectyears, ]
+                      aggregate = FALSE)
+  cyears <- intersect(getYears(vegC), selectyears)
+  vegC <- vegC[, cyears, ]
 
   lu2 <- toolForestRelocate(lu = lu, luCountry = luCountry, natTarget = natTarget, vegC = vegC)
 

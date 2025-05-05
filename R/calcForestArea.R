@@ -11,7 +11,7 @@
 #' }
 #' @export
 
-calcForestArea <- function(selectyears = "past") {
+calcForestArea <- function(selectyears = "past_til2020") {
 
   years <- sort(findset(selectyears, noset = "original"))
 
