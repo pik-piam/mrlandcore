@@ -49,12 +49,12 @@ calcLUH3 <- function(landuse_types = "magpie", irrigation = FALSE, # nolint
   clustermap <- readSource("MagpieFulldataGdx", subtype = "clustermap")
 
   if (!all(landuse_types %in% c("magpie", "LUH3", "flooded"))) {
-    stop("Unknown landuses_types = \"", landuse_types, "\"")
+    stop("Unknown landuse_types = \"", landuse_types, "\"")
   }
 
   if (landuse_types == "flooded") {
     raw <- readSource("LUH3", "management", yrs, convert = FALSE)
-    x <- as.magpie(raw)[, paste0("y", yrs), "flood"]
+    x <- as.magpie(raw[[paste0("y", yrs, "..flood")]])
 
     x <- .aggregateWithMapping(x)
     x <- .ensureAllCells(x, clustermap)
