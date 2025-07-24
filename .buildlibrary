@@ -3,7 +3,8 @@ AutocreateReadme: yes
 AcceptedWarnings:
 - 'Warning: package ''.*'' was built under R version'
 - 'Warning: namespace ''.*'' is not available and has been replaced'
-AcceptedNotes: ~
+AcceptedNotes:
+- 'Adding so many packages to the search path is excessive'
 allowLinterWarnings: no
 enforceVersionUpdate: no
 AutocreateCITATION: yes

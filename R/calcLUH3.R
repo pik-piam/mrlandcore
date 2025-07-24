@@ -63,7 +63,7 @@ calcLUH3 <- function(landuseTypes = "magpie", irrigation = FALSE,
     rawIrrigLUH <- readSource("LUH3", "management", yrs, convert = FALSE)
     irrigLUH <- as.magpie(rawIrrigLUH)
     variables <- c("irrig_c3ann", "irrig_c3per", "irrig_c4ann",
-                    "irrig_c4per", "irrig_c3nfx", "flood")
+                   "irrig_c4per", "irrig_c3nfx", "flood")
     irrigLUH <- irrigLUH[, , variables]
 
     irrigLUH <- .aggregateWithMapping(irrigLUH)
