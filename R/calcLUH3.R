@@ -50,9 +50,9 @@ calcLUH3 <- function(landuseTypes = "magpie", irrigation = FALSE,
   stopifnot(terra::units(states) == "Mha")
   # skip plantations (forestry) as it's all zeros in LUH3 at the moment
   states <- states[[grep("pltns", names(states), invert = TRUE)]]
-  x <- as.magpie(states)
+  states <- as.magpie(states)
 
-  x <- .aggregateWithMapping(x)
+  x <- .aggregateWithMapping(states)
   getItems(x, 2) <- sub("-.+", "", getItems(x, 2))
   x <- .ensureAllCells(x, clustermap)
 
@@ -60,19 +60,20 @@ calcLUH3 <- function(landuseTypes = "magpie", irrigation = FALSE,
   getSets(x, fulldim = FALSE)[3] <- "landuse"
 
   if (isTRUE(irrigation)) {
+    crops <- c("c3ann", "c3per", "c4ann", "c4per", "c3nfx")
     irrigLUH <- readSource("LUH3", "management", yrs, convert = FALSE)
     irrigLUH <- as.magpie(irrigLUH)
-    irrigLUH <- irrigLUH[, , c("irrig_c3ann", "irrig_c3per", "irrig_c4ann",
-                               "irrig_c4per", "irrig_c3nfx")]
+    irrigLUH <- irrigLUH[, , paste0("irrig_", crops)]
+    stopifnot(0 <= irrigLUH, irrigLUH <= 1)
+
+    getNames(irrigLUH) <- crops
+    # convert to Mha by multiplying with cropland in Mha
+    irrigLUH <- irrigLUH * states[, , crops]
 
     irrigLUH <- .aggregateWithMapping(irrigLUH)
     irrigLUH <- .ensureAllCells(irrigLUH, clustermap)
 
-    # TODO convert to Mha by multiplying with cropland in Mha
-    browser()
-
     names(dimnames(irrigLUH)) <- c("x.y.iso", "t", "data")
-    getNames(irrigLUH) <- sub("irrig_", "", getNames(irrigLUH))
 
     x <- add_dimension(x, dim = 3.2, add = "irrigation", nm = "total")
     x <- add_columns(x, dim = 3.2, addnm = c("irrigated", "rainfed")) # TODO fill = 0?, dont need this for primf etc, only crops
@@ -83,19 +84,7 @@ calcLUH3 <- function(landuseTypes = "magpie", irrigation = FALSE,
 
     # rainfed areas
     x[, , "rainfed"] <- collapseNames(x[, , "total"]) - collapseNames(x[, , "irrigated"])
-
-    if (any(x[, , "rainfed"] < 0)) { # TODO is this true?
-      vcat(verbosity = 2, "Flooded/irrigated area larger than rainfed area.
-            Irrigation limited to total cropland area.")
-      tmp                       <- collapseNames(x[, , "irrigated"])
-      tmp[x[, , "rainfed"] < 0] <- collapseNames(x[, , "total"])[x[, , "rainfed"] < 0]
-      x[, , "irrigated"] <- tmp
-      x[, , "rainfed"]   <- collapseNames(x[, , "total"]) - collapseNames(x[, , "irrigated"])
-    }
-
-    if (any(x[, , "rainfed"] < 0)) { # TODO how is this ever true?
-      vcat(verbositiy = 1, "Flooded/irrigated area larger than rainfed area despite fix.")
-    }
+    stopifnot(min(x[, , "rainfed"] >= 0))
   }
 
   if (landuseTypes == "magpie") {
