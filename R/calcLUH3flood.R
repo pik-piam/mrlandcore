@@ -20,8 +20,10 @@ calcLUH3flood <- function(cellular = FALSE, yrs = seq(1965, 2020, 5)) {
 
   clustermap <- readSource("MagpieFulldataGdx", subtype = "clustermap")
 
-  raw <- readSource("LUH3", "management", yrs, convert = FALSE)
-  x <- as.magpie(raw[[paste0("y", yrs, "..flood")]])
+  management <- readSource("LUH3", "management", yrs, convert = FALSE)
+  states <- readSource("LUH3", "states", yrs, convert = TRUE) # convert to Mha
+  # convert from shares to Mha, by multiplying flood share with c3ann in Mha
+  x <- as.magpie(management[[paste0("y", yrs, "..flood")]] * states[[paste0("y", yrs, "..c3ann")]])
 
   x <- .aggregateWithMapping(x)
   x <- .ensureAllCells(x, clustermap)
