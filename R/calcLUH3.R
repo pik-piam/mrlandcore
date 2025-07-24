@@ -7,8 +7,6 @@
 #' @param irrigation    if true: areas are returned separated by irrigated and rainfed,
 #'                      if false: total areas
 #' @param cellular      if true: dataset is returned on 0.5 degree resolution
-#' @param cells         Switch between "magpiecell" (59199) and "lpjcell" (67420) (default: "lpjcell")
-#'                      NOTE: This setting also affects the sums on country level!
 #' @param yrs           years to be returned (default: seq(1965, 2020, 5))
 #'
 #' @return List of magpie objects with results on country level,
@@ -22,7 +20,7 @@
 #' calcOutput("LUH3")
 #' }
 calcLUH3 <- function(landuse_types = "magpie", irrigation = FALSE, # nolint
-                     cellular = FALSE, cells = "lpjcell", yrs = seq(1965, 2020, 5)) {
+                     cellular = FALSE, yrs = seq(1965, 2020, 5)) {
 
   .aggregateWithMapping <- function(x) {
     mapping <- calcOutput("ResolutionMapping", input = "magpie", target = "luh3", aggregate = FALSE)
@@ -117,15 +115,8 @@ calcLUH3 <- function(landuse_types = "magpie", irrigation = FALSE, # nolint
     }
   }
 
-  # Return correct cell format for further calculations
-  # ATTENTION: depending on the settings this might remove some cells
-  #            from the data set!
-  if (cellular) {
-    if (cells == "magpiecell") {
-      x <- toolCoord2Isocell(x, cells = cells)
-    }
-  } else {
-    x <- mstools::toolConv2CountryByCelltype(x, cells = cells)
+  if (!cellular) {
+    x <- mstools::toolConv2CountryByCelltype(x, cells = "lpjcell")
   }
 
   return(list(x            = x,
