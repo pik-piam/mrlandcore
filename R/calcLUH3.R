@@ -2,8 +2,7 @@
 #' @description Prepares the LUH3 historic landuse-dataset for usage in MAgPIE.
 #'
 #' @param landuseTypes magpie: magpie landuse classes,
-#'                     LUH3: original landuse classes,
-#'                     flooded: flooded areas as reported by LUH
+#'                     LUH3: original landuse classes
 #' @param irrigation    if true: areas are returned separated by irrigated and rainfed,
 #'                      if false: total areas (irrigated + rainfed)
 #' @param cellular      if true: dataset is returned on 0.5 degree resolution,
@@ -43,76 +42,66 @@ calcLUH3 <- function(landuseTypes = "magpie", irrigation = FALSE,
 
   clustermap <- readSource("MagpieFulldataGdx", subtype = "clustermap")
 
-  if (!landuseTypes %in% c("magpie", "LUH3", "flooded")) {
-    stop("Unknown landuseTypes = \"", landuseTypes, "\", allowed are: magpie, LUH3, flooded")
+  if (!landuseTypes %in% c("magpie", "LUH3")) {
+    stop("Unknown landuseTypes = \"", landuseTypes, "\", allowed are: magpie, LUH3")
   }
 
-  if (landuseTypes == "flooded") {
-    raw <- readSource("LUH3", "management", yrs, convert = FALSE)
-    x <- as.magpie(raw[[paste0("y", yrs, "..flood")]])
+  raw <- readSource("LUH3", "states", yrs)
+  stopifnot(terra::units(raw) == "Mha")
+  # skip plantations (forestry) as it's all zeros in LUH3 at the moment
+  raw <- raw[[grep("pltns", names(raw), invert = TRUE)]]
+  x <- as.magpie(raw)
 
-    x <- .aggregateWithMapping(x)
-    x <- .ensureAllCells(x, clustermap)
+  x <- .aggregateWithMapping(x)
+  getItems(x, 2) <- sub("-.+", "", getItems(x, 2))
+  x <- .ensureAllCells(x, clustermap)
 
-    names(dimnames(x)) <- c("x.y.iso", "t", "data")
-  } else {
-    raw <- readSource("LUH3", "states", yrs)
-    stopifnot(terra::units(raw) == "Mha")
-    # skip plantations (forestry) as it's all zeros in LUH3 at the moment
-    raw <- raw[[grep("pltns", names(raw), invert = TRUE)]]
-    x <- as.magpie(raw)
+  names(dimnames(x)) <- c("x.y.iso", "t", "landuse")
+  getSets(x, fulldim = FALSE)[3] <- "landuse"
 
-    x <- .aggregateWithMapping(x)
-    getItems(x, 2) <- sub("-.+", "", getItems(x, 2))
-    x <- .ensureAllCells(x, clustermap)
+  if (isTRUE(irrigation)) {
+    rawIrrigLUH <- readSource("LUH3", "management", yrs, convert = FALSE)
+    irrigLUH <- as.magpie(rawIrrigLUH)
+    variables <- c("irrig_c3ann", "irrig_c3per", "irrig_c4ann",
+                    "irrig_c4per", "irrig_c3nfx", "flood")
+    irrigLUH <- irrigLUH[, , variables]
 
-    names(dimnames(x)) <- c("x.y.iso", "t", "landuse")
-    getSets(x, fulldim = FALSE)[3] <- "landuse"
+    irrigLUH <- .aggregateWithMapping(irrigLUH)
+    irrigLUH <- .ensureAllCells(irrigLUH, clustermap)
 
-    if (isTRUE(irrigation)) {
-      rawIrrigLUH <- readSource("LUH3", "management", yrs, convert = FALSE)
-      irrigLUH <- as.magpie(rawIrrigLUH)
-      variables <- c("irrig_c3ann", "irrig_c3per", "irrig_c4ann",
-                     "irrig_c4per", "irrig_c3nfx", "flood")
-      irrigLUH <- irrigLUH[, , variables]
+    names(dimnames(irrigLUH)) <- c("x.y.iso", "t", "data")
 
-      irrigLUH <- .aggregateWithMapping(irrigLUH)
-      irrigLUH <- .ensureAllCells(irrigLUH, clustermap)
+    # irrigated areas (excluding flood)
+    irrigLUH           <- irrigLUH[, , "flood", invert = TRUE]
+    getNames(irrigLUH) <- substring(getNames(irrigLUH), 7)
 
-      names(dimnames(irrigLUH)) <- c("x.y.iso", "t", "data")
+    x <- add_dimension(x, dim = 3.2, add = "irrigation", nm = "total")
+    x <- add_columns(x, dim = 3.2, addnm = c("irrigated", "rainfed"))
+    x[, , "irrigated"] <- 0
 
-      # irrigated areas (excluding flood)
-      irrigLUH           <- irrigLUH[, , "flood", invert = TRUE]
-      getNames(irrigLUH) <- substring(getNames(irrigLUH), 7)
+    irrigLUH <- add_dimension(irrigLUH, dim = 3.2, add = "irrigation", nm = "irrigated")
+    x[, , paste(getNames(irrigLUH, dim = 1), "irrigated", sep = ".")] <- irrigLUH
 
-      x <- add_dimension(x, dim = 3.2, add = "irrigation", nm = "total")
-      x <- add_columns(x, dim = 3.2, addnm = c("irrigated", "rainfed"))
-      x[, , "irrigated"] <- 0
+    # rainfed areas
+    x[, , "rainfed"] <- collapseNames(x[, , "total"]) - collapseNames(x[, , "irrigated"])
 
-      irrigLUH <- add_dimension(irrigLUH, dim = 3.2, add = "irrigation", nm = "irrigated")
-      x[, , paste(getNames(irrigLUH, dim = 1), "irrigated", sep = ".")] <- irrigLUH
-
-      # rainfed areas
-      x[, , "rainfed"] <- collapseNames(x[, , "total"]) - collapseNames(x[, , "irrigated"])
-
-      if (any(x[, , "rainfed"] < 0)) {
-        vcat(verbosity = 2, "Flooded/irrigated area larger than rainfed area.
-             Irrigation limited to total cropland area.")
-        tmp                       <- collapseNames(x[, , "irrigated"])
-        tmp[x[, , "rainfed"] < 0] <- collapseNames(x[, , "total"])[x[, , "rainfed"] < 0]
-        x[, , "irrigated"] <- tmp
-        x[, , "rainfed"]   <- collapseNames(x[, , "total"]) - collapseNames(x[, , "irrigated"])
-      }
-
-      if (any(x[, , "rainfed"] < 0)) {
-        vcat(verbositiy = 1, "Flooded/irrigated area larger than rainfed area despite fix.")
-      }
+    if (any(x[, , "rainfed"] < 0)) {
+      vcat(verbosity = 2, "Flooded/irrigated area larger than rainfed area.
+            Irrigation limited to total cropland area.")
+      tmp                       <- collapseNames(x[, , "irrigated"])
+      tmp[x[, , "rainfed"] < 0] <- collapseNames(x[, , "total"])[x[, , "rainfed"] < 0]
+      x[, , "irrigated"] <- tmp
+      x[, , "rainfed"]   <- collapseNames(x[, , "total"]) - collapseNames(x[, , "irrigated"])
     }
 
-    if (landuseTypes == "magpie") {
-      mapping <- toolGetMapping("LUH3.csv", where = "mrlandcore")
-      x       <- toolAggregate(x, mapping, dim = 3.1, from = "luh3", to = "land")
+    if (any(x[, , "rainfed"] < 0)) {
+      vcat(verbositiy = 1, "Flooded/irrigated area larger than rainfed area despite fix.")
     }
+  }
+
+  if (landuseTypes == "magpie") {
+    mapping <- toolGetMapping("LUH3.csv", where = "mrlandcore")
+    x       <- toolAggregate(x, mapping, dim = 3.1, from = "luh3", to = "land")
   }
 
   if (!cellular) {
