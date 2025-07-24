@@ -21,9 +21,6 @@
 #' \dontrun{
 #' calcOutput("LUH3")
 #' }
-#' @importFrom magclass getNames
-#' @importFrom mstools toolConv2CountryByCelltype
-
 calcLUH3 <- function(landuse_types = "magpie", irrigation = FALSE, # nolint
                      cellular = FALSE, cells = "lpjcell", yrs = seq(1965, 2020, 5)) {
 
@@ -48,8 +45,8 @@ calcLUH3 <- function(landuse_types = "magpie", irrigation = FALSE, # nolint
 
   clustermap <- readSource("MagpieFulldataGdx", subtype = "clustermap")
 
-  if (!all(landuse_types %in% c("magpie", "LUH3", "flooded"))) {
-    stop("Unknown landuse_types = \"", landuse_types, "\"")
+  if (!landuse_types %in% c("magpie", "LUH3", "flooded")) {
+    stop("Unknown landuse_types = \"", landuse_types, "\", allowed are: magpie, LUH3, flooded")
   }
 
   if (landuse_types == "flooded") {
@@ -63,7 +60,8 @@ calcLUH3 <- function(landuse_types = "magpie", irrigation = FALSE, # nolint
   } else {
     raw <- readSource("LUH3", "states", yrs)
     stopifnot(terra::units(raw) == "Mha")
-    raw <- raw[[grep("pltns", names(raw), invert = TRUE)]] # skip plantations (forestry) for now
+    # skip plantations (forestry) as it's all zeros in LUH3 at the moment
+    raw <- raw[[grep("pltns", names(raw), invert = TRUE)]]
     x <- as.magpie(raw)
 
     x <- .aggregateWithMapping(x)
@@ -127,7 +125,7 @@ calcLUH3 <- function(landuse_types = "magpie", irrigation = FALSE, # nolint
       x <- toolCoord2Isocell(x, cells = cells)
     }
   } else {
-    x <- toolConv2CountryByCelltype(x, cells = cells)
+    x <- mstools::toolConv2CountryByCelltype(x, cells = cells)
   }
 
   return(list(x            = x,
