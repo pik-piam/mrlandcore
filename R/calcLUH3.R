@@ -84,7 +84,7 @@ calcLUH3 <- function(landuseTypes = "magpie", irrigation = FALSE,
 
     # rainfed areas
     x[, , "rainfed"] <- collapseNames(x[, , "total"]) - collapseNames(x[, , "irrigated"])
-    stopifnot(min(x[, , "rainfed"] >= 0))
+    stopifnot(min(x[, , "rainfed"]) >= 0)
   }
 
   if (landuseTypes == "magpie") {
