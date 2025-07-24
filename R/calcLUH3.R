@@ -1,16 +1,16 @@
 #' @title calcLUH3
-#' @description Integrates the LUH3 landuse-dataset
+#' @description Prepares the LUH3 historic landuse-dataset for usage in MAgPIE.
 #'
-#' @param landuse_types magpie: magpie landuse classes,
-#'                      LUH3: original landuse classes
-#'                      flooded: flooded areas as reported by LUH
+#' @param landuseTypes magpie: magpie landuse classes,
+#'                     LUH3: original landuse classes,
+#'                     flooded: flooded areas as reported by LUH
 #' @param irrigation    if true: areas are returned separated by irrigated and rainfed,
-#'                      if false: total areas
-#' @param cellular      if true: dataset is returned on 0.5 degree resolution
-#' @param yrs           years to be returned (default: seq(1965, 2020, 5))
+#'                      if false: total areas (irrigated + rainfed)
+#' @param cellular      if true: dataset is returned on 0.5 degree resolution,
+#'                      if false: return country-level data
+#' @param yrs           years to be returned
 #'
-#' @return List of magpie objects with results on country level,
-#'         weight on country level, unit and description
+#' @return magpie object with land data in Mha
 #'
 #' @author Wanderson Costa, Pascal Sauer, Miodrag Stevanovic, Alexandre Koberle
 #' @seealso
@@ -19,7 +19,7 @@
 #' \dontrun{
 #' calcOutput("LUH3")
 #' }
-calcLUH3 <- function(landuse_types = "magpie", irrigation = FALSE, # nolint
+calcLUH3 <- function(landuseTypes = "magpie", irrigation = FALSE,
                      cellular = FALSE, yrs = seq(1965, 2020, 5)) {
 
   .aggregateWithMapping <- function(x) {
@@ -43,11 +43,11 @@ calcLUH3 <- function(landuse_types = "magpie", irrigation = FALSE, # nolint
 
   clustermap <- readSource("MagpieFulldataGdx", subtype = "clustermap")
 
-  if (!landuse_types %in% c("magpie", "LUH3", "flooded")) {
-    stop("Unknown landuse_types = \"", landuse_types, "\", allowed are: magpie, LUH3, flooded")
+  if (!landuseTypes %in% c("magpie", "LUH3", "flooded")) {
+    stop("Unknown landuseTypes = \"", landuseTypes, "\", allowed are: magpie, LUH3, flooded")
   }
 
-  if (landuse_types == "flooded") {
+  if (landuseTypes == "flooded") {
     raw <- readSource("LUH3", "management", yrs, convert = FALSE)
     x <- as.magpie(raw[[paste0("y", yrs, "..flood")]])
 
@@ -109,7 +109,7 @@ calcLUH3 <- function(landuse_types = "magpie", irrigation = FALSE, # nolint
       }
     }
 
-    if (landuse_types == "magpie") {
+    if (landuseTypes == "magpie") {
       mapping <- toolGetMapping("LUH3.csv", where = "mrlandcore")
       x       <- toolAggregate(x, mapping, dim = 3.1, from = "luh3", to = "land")
     }
@@ -122,6 +122,6 @@ calcLUH3 <- function(landuse_types = "magpie", irrigation = FALSE, # nolint
   return(list(x            = x,
               weight       = NULL,
               unit         = "Mha",
-              description  = "land area for different land use types.",
+              description  = "land area for different land use types",
               isocountries = !cellular))
 }
