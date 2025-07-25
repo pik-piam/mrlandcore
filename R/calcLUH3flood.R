@@ -1,3 +1,20 @@
+#' @title calcLUH3flood
+#' @description Prepares the LUH3 historic flood data for usage in MAgPIE,
+#' by calculating the share of c3ann with c3ann area in Mha to obtain flood area in Mha.
+#'
+#' @param cellular      if true: dataset is returned on 0.5 degree resolution,
+#'                      if false: return country-level data
+#' @param yrs           years to be returned
+#'
+#' @return magpie object with flood data in Mha
+#'
+#' @author Wanderson Costa, Pascal Sauer, Miodrag Stevanovic, Alexandre Koberle
+#' @seealso
+#' [calcLanduseInitialisation()]
+#' @examples
+#' \dontrun{
+#' calcOutput("LUH3flood")
+#' }
 calcLUH3flood <- function(cellular = FALSE, yrs = seq(1965, 2020, 5)) {
   .aggregateWithMapping <- function(x) {
     mapping <- calcOutput("ResolutionMapping", input = "magpie", target = "luh3", aggregate = FALSE)
@@ -37,6 +54,6 @@ calcLUH3flood <- function(cellular = FALSE, yrs = seq(1965, 2020, 5)) {
   return(list(x            = x,
               weight       = NULL,
               unit         = "Mha",
-              description  = "land area for different land use types",
+              description  = "flood area",
               isocountries = !cellular))
 }
