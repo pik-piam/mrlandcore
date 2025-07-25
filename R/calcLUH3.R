@@ -76,14 +76,13 @@ calcLUH3 <- function(landuseTypes = "magpie", irrigation = FALSE,
     names(dimnames(irrigLUH)) <- c("x.y.iso", "t", "data")
 
     x <- add_dimension(x, dim = 3.2, add = "irrigation", nm = "total")
-    x <- add_columns(x, dim = 3.2, addnm = c("irrigated", "rainfed")) # TODO fill = 0?, dont need this for primf etc, only crops
-    x[, , "irrigated"] <- 0
+    getItems(x, 3.2, full = TRUE)[getItems(x, 3.1, full = TRUE) %in% crops] <- "rainfed"
+    x <- add_columns(x, dim = 3, addnm = paste0(crops, ".irrigated"))
 
     irrigLUH <- add_dimension(irrigLUH, dim = 3.2, add = "irrigation", nm = "irrigated")
     x[, , getItems(irrigLUH, 3)] <- irrigLUH
 
-    # rainfed areas
-    x[, , "rainfed"] <- collapseNames(x[, , "total"]) - collapseNames(x[, , "irrigated"])
+    x[, , "rainfed"] <- x[, , "rainfed"] - collapseNames(x[, , "irrigated"])
     stopifnot(min(x[, , "rainfed"]) >= 0)
   }
 
