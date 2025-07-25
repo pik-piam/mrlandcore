@@ -88,7 +88,13 @@ calcLUH3 <- function(landuseTypes = "magpie", irrigation = FALSE,
 
   if (landuseTypes == "magpie") {
     mapping <- toolGetMapping("LUH3.csv", where = "mrlandcore")
-    x       <- toolAggregate(x, mapping, dim = 3.1, from = "luh3", to = "land")
+    if (isTRUE(irrigation)) {
+      mapping <- data.frame(luh3 = getItems(x, 3),
+                            land = paste0(mapping[match(getItems(x, 3.1, full = TRUE), mapping$luh3), ]$land,
+                                          ".", getItems(x, 3.2, full = TRUE)))
+    }
+    stopifnot(setequal(getItems(x, 3), mapping$luh3))
+    x <- toolAggregate(x, mapping, dim = 3, from = "luh3", to = "land")
   }
 
   if (!cellular) {
