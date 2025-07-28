@@ -5,34 +5,29 @@
 \title{calcLUH3}
 \usage{
 calcLUH3(
-  landuse_types = "magpie",
+  landuseTypes = "magpie",
   irrigation = FALSE,
   cellular = FALSE,
-  cells = "lpjcell",
   yrs = seq(1965, 2020, 5)
 )
 }
 \arguments{
-\item{landuse_types}{magpie: magpie landuse classes,
-LUH3: original landuse classes
-flooded: flooded areas as reported by LUH}
+\item{landuseTypes}{magpie: magpie landuse classes,
+LUH3: original landuse classes}
 
 \item{irrigation}{if true: areas are returned separated by irrigated and rainfed,
-if false: total areas}
+if false: total areas (irrigated + rainfed)}
 
-\item{cellular}{if true: dataset is returned on 0.5 degree resolution}
+\item{cellular}{if true: dataset is returned on 0.5 degree resolution,
+if false: return country-level data}
 
-\item{cells}{Switch between "magpiecell" (59199) and "lpjcell" (67420) (default: "lpjcell")
-NOTE: This setting also affects the sums on country level!}
-
-\item{yrs}{years to be returned (default: seq(1965, 2020, 5))}
+\item{yrs}{years to be returned}
 }
 \value{
-List of magpie objects with results on country level,
-        weight on country level, unit and description
+magpie object with land data in Mha
 }
 \description{
-Integrates the LUH3 landuse-dataset
+Prepares the LUH3 historic landuse-dataset for usage in MAgPIE.
 }
 \examples{
 \dontrun{

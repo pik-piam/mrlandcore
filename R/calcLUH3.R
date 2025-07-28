@@ -1,18 +1,15 @@
 #' @title calcLUH3
-#' @description Integrates the LUH3 landuse-dataset
+#' @description Prepares the LUH3 historic landuse-dataset for usage in MAgPIE.
 #'
-#' @param landuse_types magpie: magpie landuse classes,
-#'                      LUH3: original landuse classes
-#'                      flooded: flooded areas as reported by LUH
+#' @param landuseTypes magpie: magpie landuse classes,
+#'                     LUH3: original landuse classes
 #' @param irrigation    if true: areas are returned separated by irrigated and rainfed,
-#'                      if false: total areas
-#' @param cellular      if true: dataset is returned on 0.5 degree resolution
-#' @param cells         Switch between "magpiecell" (59199) and "lpjcell" (67420) (default: "lpjcell")
-#'                      NOTE: This setting also affects the sums on country level!
-#' @param yrs           years to be returned (default: seq(1965, 2020, 5))
+#'                      if false: total areas (irrigated + rainfed)
+#' @param cellular      if true: dataset is returned on 0.5 degree resolution,
+#'                      if false: return country-level data
+#' @param yrs           years to be returned
 #'
-#' @return List of magpie objects with results on country level,
-#'         weight on country level, unit and description
+#' @return magpie object with land data in Mha
 #'
 #' @author Wanderson Costa, Pascal Sauer, Miodrag Stevanovic, Alexandre Koberle
 #' @seealso
@@ -21,11 +18,8 @@
 #' \dontrun{
 #' calcOutput("LUH3")
 #' }
-#' @importFrom magclass getNames
-#' @importFrom mstools toolConv2CountryByCelltype
-
-calcLUH3 <- function(landuse_types = "magpie", irrigation = FALSE, # nolint
-                     cellular = FALSE, cells = "lpjcell", yrs = seq(1965, 2020, 5)) {
+calcLUH3 <- function(landuseTypes = "magpie", irrigation = FALSE,
+                     cellular = FALSE, yrs = seq(1965, 2020, 5)) {
 
   .aggregateWithMapping <- function(x) {
     mapping <- calcOutput("ResolutionMapping", input = "magpie", target = "luh3", aggregate = FALSE)
@@ -48,91 +42,68 @@ calcLUH3 <- function(landuse_types = "magpie", irrigation = FALSE, # nolint
 
   clustermap <- readSource("MagpieFulldataGdx", subtype = "clustermap")
 
-  if (!all(landuse_types %in% c("magpie", "LUH3", "flooded"))) {
-    stop("Unknown landuses_types = \"", landuse_types, "\"")
+  if (!landuseTypes %in% c("magpie", "LUH3")) {
+    stop("Unknown landuseTypes = \"", landuseTypes, "\", allowed are: magpie, LUH3")
   }
 
-  if (landuse_types == "flooded") {
-    raw <- readSource("LUH3", "management", yrs, convert = FALSE)
-    x <- as.magpie(raw)[, paste0("y", yrs), "flood"]
+  states <- readSource("LUH3", "states", yrs)
+  stopifnot(terra::units(states) == "Mha")
+  # skip plantations (forestry) as it's all zeros in LUH3 at the moment
+  states <- states[[grep("pltns", names(states), invert = TRUE)]]
+  states <- as.magpie(states)
 
-    x <- .aggregateWithMapping(x)
-    x <- .ensureAllCells(x, clustermap)
+  x <- .aggregateWithMapping(states)
+  getItems(x, 2) <- sub("-.+", "", getItems(x, 2))
+  x <- .ensureAllCells(x, clustermap)
 
-    names(dimnames(x)) <- c("x.y.iso", "t", "data")
-  } else {
-    raw <- readSource("LUH3", "states", yrs)
-    stopifnot(terra::units(raw) == "Mha")
-    raw <- raw[[grep("pltns", names(raw), invert = TRUE)]] # skip plantations (forestry) for now
-    x <- as.magpie(raw)
+  names(dimnames(x)) <- c("x.y.iso", "t", "landuse")
+  getSets(x, fulldim = FALSE)[3] <- "landuse"
 
-    x <- .aggregateWithMapping(x)
-    getItems(x, 2) <- sub("-.+", "", getItems(x, 2))
-    x <- .ensureAllCells(x, clustermap)
+  if (isTRUE(irrigation)) {
+    crops <- c("c3ann", "c3per", "c4ann", "c4per", "c3nfx")
+    irrigLUH <- readSource("LUH3", "management", yrs, convert = FALSE)
+    irrigLUH <- as.magpie(irrigLUH)
+    irrigLUH <- irrigLUH[, , paste0("irrig_", crops)]
+    stopifnot(0 <= irrigLUH, irrigLUH <= 1)
 
-    names(dimnames(x)) <- c("x.y.iso", "t", "landuse")
-    getSets(x, fulldim = FALSE)[3] <- "landuse"
+    getNames(irrigLUH) <- crops
+    # convert to Mha by multiplying with cropland in Mha
+    irrigLUH <- irrigLUH * states[, , crops]
 
+    irrigLUH <- .aggregateWithMapping(irrigLUH)
+    irrigLUH <- .ensureAllCells(irrigLUH, clustermap)
+
+    names(dimnames(irrigLUH)) <- c("x.y.iso", "t", "data")
+
+    x <- add_dimension(x, dim = 3.2, add = "irrigation", nm = "total")
+    getItems(x, 3.2, full = TRUE)[getItems(x, 3.1, full = TRUE) %in% crops] <- "rainfed"
+    x <- add_columns(x, dim = 3, addnm = paste0(crops, ".irrigated"))
+
+    irrigLUH <- add_dimension(irrigLUH, dim = 3.2, add = "irrigation", nm = "irrigated")
+    x[, , getItems(irrigLUH, 3)] <- irrigLUH
+
+    x[, , "rainfed"] <- x[, , "rainfed"] - collapseNames(x[, , "irrigated"])
+    stopifnot(min(x[, , "rainfed"]) >= 0)
+  }
+
+  if (landuseTypes == "magpie") {
+    mapping <- toolGetMapping("LUH3.csv", where = "mrlandcore")
     if (isTRUE(irrigation)) {
-      rawIrrigLUH <- readSource("LUH3", "management", yrs, convert = FALSE)
-      irrigLUH <- as.magpie(rawIrrigLUH)
-      variables <- c("irrig_c3ann", "irrig_c3per", "irrig_c4ann",
-                     "irrig_c4per", "irrig_c3nfx", "flood")
-      irrigLUH <- irrigLUH[, , variables]
-
-      irrigLUH <- .aggregateWithMapping(irrigLUH)
-      irrigLUH <- .ensureAllCells(irrigLUH, clustermap)
-
-      names(dimnames(irrigLUH)) <- c("x.y.iso", "t", "data")
-
-      # irrigated areas (excluding flood)
-      irrigLUH           <- irrigLUH[, , "flood", invert = TRUE]
-      getNames(irrigLUH) <- substring(getNames(irrigLUH), 7)
-
-      x <- add_dimension(x, dim = 3.2, add = "irrigation", nm = "total")
-      x <- add_columns(x, dim = 3.2, addnm = c("irrigated", "rainfed"))
-      x[, , "irrigated"] <- 0
-
-      irrigLUH <- add_dimension(irrigLUH, dim = 3.2, add = "irrigation", nm = "irrigated")
-      x[, , paste(getNames(irrigLUH, dim = 1), "irrigated", sep = ".")] <- irrigLUH
-
-      # rainfed areas
-      x[, , "rainfed"] <- collapseNames(x[, , "total"]) - collapseNames(x[, , "irrigated"])
-
-      if (any(x[, , "rainfed"] < 0)) {
-        vcat(verbosity = 2, "Flooded/irrigated area larger than rainfed area.
-             Irrigation limited to total cropland area.")
-        tmp                       <- collapseNames(x[, , "irrigated"])
-        tmp[x[, , "rainfed"] < 0] <- collapseNames(x[, , "total"])[x[, , "rainfed"] < 0]
-        x[, , "irrigated"] <- tmp
-        x[, , "rainfed"]   <- collapseNames(x[, , "total"]) - collapseNames(x[, , "irrigated"])
-      }
-
-      if (any(x[, , "rainfed"] < 0)) {
-        vcat(verbositiy = 1, "Flooded/irrigated area larger than rainfed area despite fix.")
-      }
+      mapping <- data.frame(luh3 = getItems(x, 3),
+                            land = paste0(mapping[match(getItems(x, 3.1, full = TRUE), mapping$luh3), ]$land,
+                                          ".", getItems(x, 3.2, full = TRUE)))
     }
-
-    if (landuse_types == "magpie") {
-      mapping <- toolGetMapping("LUH3.csv", where = "mrlandcore")
-      x       <- toolAggregate(x, mapping, dim = 3.1, from = "luh3", to = "land")
-    }
+    stopifnot(setequal(getItems(x, 3), mapping$luh3))
+    x <- toolAggregate(x, mapping, dim = 3, from = "luh3", to = "land")
   }
 
-  # Return correct cell format for further calculations
-  # ATTENTION: depending on the settings this might remove some cells
-  #            from the data set!
-  if (cellular) {
-    if (cells == "magpiecell") {
-      x <- toolCoord2Isocell(x, cells = cells)
-    }
-  } else {
-    x <- toolConv2CountryByCelltype(x, cells = cells)
+  if (!cellular) {
+    x <- mstools::toolConv2CountryByCelltype(x, cells = "lpjcell")
   }
 
   return(list(x            = x,
               weight       = NULL,
               unit         = "Mha",
-              description  = "land area for different land use types.",
+              description  = "land area for different land use types",
               isocountries = !cellular))
 }
