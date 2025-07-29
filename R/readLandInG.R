@@ -16,7 +16,7 @@
 #' @importFrom utils read.delim
 #'
 #' @author Felicitas Beier
-#' @seealso \code{\link{readSource}}
+#' @seealso \code{\link[madrat]{readSource}}
 #' @examples
 #' \dontrun{
 #' A <- readSource("LandInG", subtype = "harvestedArea", aggregate = FALSE)
