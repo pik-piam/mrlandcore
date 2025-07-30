@@ -46,7 +46,7 @@ calcCroparea <- function(sectoral = "kcr", physical = TRUE, cellular = FALSE,
 
     if (!is.null(sectoral) && !(sectoral == "lpj")) {
 
-      cropPrim <- readSource("FAO_online", "Crop")[, , "area_harvested"]
+      cropPrim <- readSource("FAO_online", "CropLive2010")[, , "area_harvested"]
       # use linear_interpolate
       fodder   <- readSource("FAO", "Fodder")[, , "area_harvested"]
       fodder   <- toolExtrapolateFodder(fodder, endyear = max(getYears(cropPrim, as.integer = TRUE)))
@@ -54,11 +54,11 @@ calcCroparea <- function(sectoral = "kcr", physical = TRUE, cellular = FALSE,
 
       if (sectoral %in% c("FoodBalanceItem", "kcr")) {
 
-        aggregation <- toolGetMapping("FAOitems_online.csv", type = "sectoral",
-                                      where = "mappingfolder")
-        remove      <- setdiff(getNames(data, dim = 1), aggregation$ProductionItem)
+        aggregation <- toolGetMapping("FAOitems_online_2010update.csv", type = "sectoral",
+                                      where = "mrfaocore")
+        remove      <- setdiff(getNames(data, dim = 1), aggregation$post2010_ProductionItem)
         data        <- data[, , remove, invert = TRUE]
-        data        <- toolAggregate(data, rel = aggregation, from = "ProductionItem",
+        data        <- toolAggregate(data, rel = aggregation, from = "post2010_ProductionItem",
                                      to = ifelse(sectoral == "kcr", "k", sectoral),
                                      dim = 3.1, partrel = TRUE)
 
@@ -72,7 +72,7 @@ calcCroparea <- function(sectoral = "kcr", physical = TRUE, cellular = FALSE,
           remove <- setdiff(getItems(data, dim = 3.1), kcr)
 
           if (length(remove) > 0) {
-            remainArea <- mean(dimSums(data[, , "remaining.area_harvested"], dim = 1) /
+            remainArea <- mean(dimSums(data[, , "area_harvested"][, , remove], dim = 1) /
                                  dimSums(dimSums(data[, , "area_harvested"], dim = 3), dim = 1))
             if (remainArea > 0.02) vcat(1, "Aggregation created a 'remaining' category. The area harvested is",
                                         round(remainArea, digits = 3) * 100, "% of total \n")
@@ -127,7 +127,12 @@ calcCroparea <- function(sectoral = "kcr", physical = TRUE, cellular = FALSE,
 
       luhCroparea  <- calcOutput("LUH2v2", landuse_types = "LUH2v2",
                                  cells = cells, aggregate = FALSE, irrigation = irrigation,
-                                 cellular = TRUE, selectyears = "past")
+                                 cellular = TRUE, selectyears = seq(1965, 2015, 5))
+
+      commonYears  <- intersect(getYears(luhWeights), getYears(luhCroparea))
+      luhWeights   <- luhWeights[, commonYears, ]
+      luhCroparea  <- luhCroparea[, commonYears, ]
+
       if (cells == "magpiecell") {
         luhCroparea <- toolCell2isoCell(luhCroparea, cells = cells)
       }
@@ -143,8 +148,13 @@ calcCroparea <- function(sectoral = "kcr", physical = TRUE, cellular = FALSE,
       }
 
       # corrected rice area (in Mha)
-      ricearea <- calcOutput("Ricearea", cellular = TRUE, cells = cells,
+      ricearea <- calcOutput("Ricearea", cellular = TRUE,
                              share = FALSE, aggregate = FALSE)
+
+      commonYears  <- intersect(getYears(ricearea), getYears(luhCroparea))
+      luhWeights   <- luhWeights[, commonYears, ]
+      luhCroparea  <- luhCroparea[, commonYears, ]
+      ricearea     <- ricearea[, commonYears, ]
 
       # irrigation
       if (irrigation == TRUE) {

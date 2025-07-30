@@ -7,7 +7,6 @@
 #' @param bioenergy   "ignore": 0 for share and totals,
 #'                    "fix": fixes betr and begr shares in LUHofMAG to 1 for c3per and c4per
 #' @param rice        rice category: "non_flooded" or "total"
-#' @param selectyears years to be returned (default: "past")
 #' @param missing     "ignore" will leave data as is,
 #'                    "fill" will add proxy values for data gaps of FAO
 #' @return List of magpie objects with results on country level, weight on country level, unit and description
@@ -19,9 +18,8 @@
 #'
 #' @importFrom magpiesets findset
 
-calcLUH2MAgPIE <- function(share = "total", bioenergy = "ignore", rice = "non_flooded",
-                           selectyears = "past", missing = "ignore") {
-  past <- findset("past")
+calcLUH2MAgPIE <- function(share = "total", bioenergy = "ignore",
+                           rice = "non_flooded", missing = "ignore") {
 
   if (share == "total") {
 
@@ -30,13 +28,17 @@ calcLUH2MAgPIE <- function(share = "total", bioenergy = "ignore", rice = "non_fl
     }
 
     FAOdata     <- calcOutput("Croparea", sectoral = "ProductionItem", # nolint : object_name_linter.
-                              physical = FALSE, aggregate = FALSE)[, past, ]
+                              physical = FALSE, aggregate = FALSE)
 
     if (rice == "non_flooded") {
       # Rice areas are pre-determined by areas reported as flooded in LUH.
       # All additional rice areas (according to FAO) are allocated using FAO data
-      nonfloodedShr                 <- calcOutput("Ricearea", cellular = FALSE, share = TRUE, aggregate = FALSE)
-      FAOdata[, , "27|Rice, paddy"] <- FAOdata[, , "27|Rice, paddy"] * nonfloodedShr # nolint : object_name_linter.
+      nonfloodedShr  <- calcOutput("Ricearea", cellular = FALSE, share = TRUE, aggregate = FALSE)
+      commonYears    <- intersect(getYears(nonfloodedShr), getYears(FAOdata))
+      nonfloodedShr  <- nonfloodedShr[, commonYears, ]
+      FAOdata        <- FAOdata[, commonYears, ]                       # nolint : object_name_linter
+      FAOdata[, , "27|Rice"] <- FAOdata[, , "27|Rice"] * nonfloodedShr # nolint : object_name_linter.
+
     }
 
     kcr         <- findset("kcr")
@@ -55,7 +57,7 @@ calcLUH2MAgPIE <- function(share = "total", bioenergy = "ignore", rice = "non_fl
 
   } else if (share == "LUHofMAG") {
 
-    aggregation <- calcOutput("LUH2MAgPIE", aggregate = FALSE, selectyears = selectyears, rice = rice)
+    aggregation <- calcOutput("LUH2MAgPIE", aggregate = FALSE, rice = rice)
 
     MAG  <- dimSums(aggregation, dim = "LUH") # nolint : object_name_linter.
     x    <- aggregation / MAG
@@ -99,7 +101,7 @@ calcLUH2MAgPIE <- function(share = "total", bioenergy = "ignore", rice = "non_fl
 
   } else if (share == "MAGofLUH") {
 
-    aggregation <- calcOutput("LUH2MAgPIE", aggregate = FALSE, selectyears = selectyears, rice = rice)
+    aggregation <- calcOutput("LUH2MAgPIE", aggregate = FALSE, rice = rice)
 
     LUH  <- dimSums(aggregation, dim = "MAG") # nolint : object_name_linter.
     x    <- aggregation / LUH

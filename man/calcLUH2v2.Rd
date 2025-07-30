@@ -9,7 +9,7 @@ calcLUH2v2(
   irrigation = FALSE,
   cellular = FALSE,
   cells = "lpjcell",
-  selectyears = "past"
+  selectyears = "past_til2020"
 )
 }
 \arguments{
