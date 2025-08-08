@@ -19,7 +19,7 @@
 #' calcOutput("LUH3")
 #' }
 calcLUH3 <- function(landuseTypes = "magpie", irrigation = FALSE,
-                     cellular = FALSE, yrs = sort(findset("past_til2020", noset = "original"))) {
+                     cellular = FALSE, yrs = seq(1965, 2020, 5)) {
 
   yrs <- as.integer(gsub("y", "", yrs))
 
