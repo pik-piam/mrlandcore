@@ -11,13 +11,12 @@
 #'                   "kcr" MAgPIE items, and "lpj" LPJmL items
 #' @param physical   if TRUE the sum over all crops agrees with the cropland area per country
 #' @param cellular   if TRUE: calculates cellular MAgPIE crop area for all magpie croptypes.
-#'                   Crop area from LUH2 crop types (c3ann, c4ann, c3per, c4per, cnfx)
-#'                   are mapped to MAgpIE crop types using mappingLUH2cropsToMAgPIEcrops.csv.
-#'                   Harvested areas of FAO weight area within a specific LUH crop type
-#'                   to divide into MAgPIE crop types.
-#' @param cells      Switch between "magpiecell" (59199) and "lpjcell" (67420)
+#'                   Crop area from LUH3 crop types (c3ann, c4ann, c3per, c4per, cnfx)
+#'                   are mapped to MAgpIE crop types using "FAO2LUH2MAG_croptypes" and doing
+#'                   an intermediate step via harvested areas of FAO weight area within a
+#'                   specific LUH crop type to divide into MAgPIE crop types.
 #' @param irrigation If true: cellular areas are returned separated
-#'                   into irrigated and rainfed (see setup in calcLUH2v2)
+#'                   into irrigated and rainfed (see setup in calcLUH3)
 #'
 #' @return areas of individual crops from FAOSTAT and weight
 #'
@@ -31,8 +30,7 @@
 #' @importFrom utils person
 #' @importFrom withr local_options
 
-calcCroparea <- function(sectoral = "kcr", physical = TRUE, cellular = FALSE,
-                         cells = "lpjcell", irrigation = FALSE) {
+calcCroparea <- function(sectoral = "kcr", physical = TRUE, cellular = FALSE, irrigation = FALSE) {
 
   local_options(magclass_sizeLimit = 1e+10)
 
@@ -90,9 +88,9 @@ calcCroparea <- function(sectoral = "kcr", physical = TRUE, cellular = FALSE,
       magCroparea <- calcOutput("Croparea", sectoral = "kcr", physical = physical,
                                 cellular = FALSE, irrigation = FALSE, aggregate = FALSE)
 
-      mag2lpj    <- toolGetMapping(type = "sectoral", name = "MAgPIE_LPJmL.csv",
+      mag2lpj     <- toolGetMapping(type = "sectoral", name = "MAgPIE_LPJmL.csv",
                                    where = "mappingfolder")
-      mag2lpj    <- mag2lpj[!(mag2lpj$MAgPIE == "pasture"), ]
+      mag2lpj     <- mag2lpj[!(mag2lpj$MAgPIE == "pasture"), ]
 
       lpjCroparea <- toolAggregate(magCroparea, rel = mag2lpj, from = "MAgPIE", to = "LPJmL", dim = 3.1)
       data        <- lpjCroparea
@@ -125,27 +123,14 @@ calcCroparea <- function(sectoral = "kcr", physical = TRUE, cellular = FALSE,
 
       luhCroptypes <- c("c3ann", "c4ann", "c3per", "c4per", "c3nfx")
 
-      luhCroparea  <- calcOutput("LUH2v2", landuse_types = "LUH2v2",
-                                 cells = cells, aggregate = FALSE, irrigation = irrigation,
-                                 cellular = TRUE, selectyears = seq(1965, 2015, 5))
+      luhCroparea  <- calcOutput("LUH3", landuseTypes = "LUH3", aggregate = FALSE,
+                                 irrigation = irrigation, cellular = TRUE)[, , luhCroptypes]
 
       commonYears  <- intersect(getYears(luhWeights), getYears(luhCroparea))
       luhWeights   <- luhWeights[, commonYears, ]
       luhCroparea  <- luhCroparea[, commonYears, ]
 
-      if (cells == "magpiecell") {
-        luhCroparea <- toolCell2isoCell(luhCroparea, cells = cells)
-      }
-
-      # Differentiation step that is necessary until full transition to 67k cells
-      if (cells == "magpiecell") {
-        commonCountries <- intersect(getItems(luhWeights, dim = "ISO"), getItems(luhCroparea, dim = "country"))
-      } else if (cells == "lpjcell") {
-        commonCountries <- intersect(getItems(luhWeights, dim = "ISO"), getItems(luhCroparea, dim = "iso"))
-      } else {
-        stop("Please select cellular data (mapgiecell or lpjcell) to be returned
-              by calcCroparea when selecting cellular = TRUE")
-      }
+      commonCountries <- intersect(getItems(luhWeights, dim = "ISO"), getItems(luhCroparea, dim = "iso"))
 
       # corrected rice area (in Mha)
       ricearea <- calcOutput("Ricearea", cellular = TRUE,
@@ -159,13 +144,14 @@ calcCroparea <- function(sectoral = "kcr", physical = TRUE, cellular = FALSE,
       # irrigation
       if (irrigation == TRUE) {
         # for check
-        luhCropareaTotal <- dimSums(luhCroparea[, , luhCroptypes][, , "total"], dim = 3)
+        luhCropareaTotal <- dimSums(luhCroparea, dim = 3)
 
         # calculate irrigation share for rice area correction
         irrigShr <- new.magpie(cells_and_regions = getCells(luhCroparea),
                                years = getYears(luhCroparea),
                                names = getNames(luhCroparea), fill = NA)
-        irrigShr <- irrigShr[, , "total", invert = TRUE]
+        luhCroparea <- add_columns(luhCroparea, addnm = "total", dim = 3.2, fill = NA)
+        luhCroparea[, , "total"] <-  dimSums(luhCroparea[, , c("rainfed", "irrigated")], dim = 3.2)
 
         irrigShr[, , "irrigated"] <- collapseNames(ifelse(luhCroparea[, , "total"] > 0,
                                                           luhCroparea[, , "irrigated"] / luhCroparea[, , "total"], 0))
@@ -174,12 +160,11 @@ calcCroparea <- function(sectoral = "kcr", physical = TRUE, cellular = FALSE,
         # flooded rice areas
         floodedRice <- collapseNames(ricearea[, , "flooded"] * irrigShr[, , "c3ann"])
 
-        # reduce object size (if "total" is also reported magpie object grows too big (>1.3GB))
         luhCroparea <- luhCroparea[, , "total", invert = TRUE]
 
       } else {
         # for check
-        luhCropareaTotal <- dimSums(luhCroparea[, , luhCroptypes], dim = 3)
+        luhCropareaTotal <- dimSums(luhCroparea, dim = 3)
 
         # flooded rice areas
         floodedRice <- collapseNames(ricearea[, , "flooded"])
@@ -190,7 +175,6 @@ calcCroparea <- function(sectoral = "kcr", physical = TRUE, cellular = FALSE,
       luhCroparea[, , "c3ann"] <- luhCroparea[, , "c3ann"] - floodedRice
 
       # correction of LUH cropareas with FAO country shares
-      luhCroparea      <- luhCroparea[, , luhCroptypes]
       luh2mag          <- luhCroparea * luhWeights[commonCountries, , ]
       magCroparea      <- dimSums(luh2mag, dim = 3.1)
 
@@ -207,11 +191,10 @@ calcCroparea <- function(sectoral = "kcr", physical = TRUE, cellular = FALSE,
     } else if (sectoral == "lpj") {
 
       magCroparea   <- calcOutput("Croparea", sectoral = "kcr", physical = physical,
-                                  cellular = TRUE, irrigation = irrigation,
-                                  cells = cells, aggregate = FALSE)
-      mag2lpj      <- toolGetMapping(type = "sectoral", name = "MAgPIE_LPJmL.csv",
+                                  cellular = TRUE, irrigation = irrigation, aggregate = FALSE)
+      mag2lpj       <- toolGetMapping(type = "sectoral", name = "MAgPIE_LPJmL.csv",
                                      where = "mappingfolder")
-      mag2lpj      <- mag2lpj[!(mag2lpj$MAgPIE == "pasture"), ]
+      mag2lpj       <- mag2lpj[!(mag2lpj$MAgPIE == "pasture"), ]
       lpjCroparea   <- toolAggregate(magCroparea, rel = mag2lpj, from = "MAgPIE", to = "LPJmL", dim = "MAG")
       data          <- lpjCroparea
 
@@ -222,13 +205,7 @@ calcCroparea <- function(sectoral = "kcr", physical = TRUE, cellular = FALSE,
     if (!physical) {
 
       multiCropping   <- calcOutput("Multicropping", aggregate = FALSE)
-
-      if (cells == "magpiecell") {
-        commonCountries <- intersect(getItems(multiCropping, dim = "ISO"), getItems(data, dim = "country"))
-      } else if (cells == "lpjcell") {
-        commonCountries <- intersect(getItems(multiCropping, dim = "ISO"), getItems(data, dim = "iso"))
-      }
-
+      commonCountries <- intersect(getItems(multiCropping, dim = "ISO"), getItems(data, dim = "iso"))
       data            <- data * multiCropping[commonCountries, getYears(data), ]
     }
   }
