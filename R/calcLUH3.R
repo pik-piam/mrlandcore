@@ -19,7 +19,9 @@
 #' calcOutput("LUH3")
 #' }
 calcLUH3 <- function(landuseTypes = "magpie", irrigation = FALSE,
-                     cellular = FALSE, yrs = seq(1965, 2020, 5)) {
+                     cellular = FALSE, yrs = sort(findset("past_til2020", noset = "original"))) {
+
+  yrs <- as.integer(gsub("y", "", yrs))
 
   .aggregateWithMapping <- function(x) {
     mapping <- calcOutput("ResolutionMapping", input = "magpie", target = "luh3", aggregate = FALSE)
