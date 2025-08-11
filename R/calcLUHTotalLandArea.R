@@ -14,7 +14,7 @@ calcLUHTotalLandArea <- function(datasource = "LUH3") {
                         cellular = TRUE, yrs = 2010, aggregate = FALSE)
   } else if (datasource == "LUH2v2") {
     area  <- calcOutput("LUH2v2", landuse_types = "LUH2v2", irrigation = FALSE,
-                        cellular = TRUE, selectyears = "2010", aggregate = FALSE)
+                        cellular = TRUE, selectyears = "y2010", aggregate = FALSE)
   } else {
     stop(datasource, " is not a valid data source for calcLUHTotalLandArea")
   }
