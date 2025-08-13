@@ -116,7 +116,7 @@ calcLPJmL_new <- function(version = "LPJmL4_for_MAgPIE_44ac93de", # nolint
         ## In LPJmL: (monthly) runoff given in LPJmL: mm/month
         # Transform units: liter/m^2 -> liter
         # landarea in mio. ha
-        landarea <- setYears(collapseNames(dimSums(readSource("LUH2v2", subtype = "states",
+        landarea <- setYears(collapseNames(dimSums(readSource("LUH3", subtype = "states",
                                                               convert = "onlycorrect")[, "y1995", ],
                                                    dim = 3)), NULL)
         x        <- x * landarea * 1e10
