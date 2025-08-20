@@ -15,9 +15,6 @@
 #'
 #' @importFrom madrat calcOutput readSource toolSubtypeSelect toolSplitSubtype
 #' @importFrom magclass dimSums getYears setYears
-#'
-#' @seealso
-#' [readLPJmL()]
 #' @examples
 #' \dontrun{
 #' calcOutput("LPJmL_new", subtype = "soilc", aggregate = FALSE)
@@ -116,7 +113,7 @@ calcLPJmL_new <- function(version = "LPJmL4_for_MAgPIE_44ac93de", # nolint
         ## In LPJmL: (monthly) runoff given in LPJmL: mm/month
         # Transform units: liter/m^2 -> liter
         # landarea in mio. ha
-        landarea <- setYears(collapseNames(dimSums(calcOutput("LUH3", cellular = TRUE, 
+        landarea <- setYears(collapseNames(dimSums(calcOutput("LUH3", cellular = TRUE,
                                                               aggregate = FALSE)[, "y1995", ],
                                                    dim = 3)), NULL)
         x        <- x * landarea * 1e10

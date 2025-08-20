@@ -5,12 +5,12 @@
 #' more settings.
 #'
 #' @param cells "magpiecell" for 59199 cells or "lpjcell" for 67420 cells
-#' @param selectyears Years to be computed (default on "past")
+#' @param selectyears Years to be computed
 #' @return Cellular landuse initialisation in its base configuration
 #' @author Jan Philipp Dietrich, Benjamin Leon Bodirsky, Kristine Karstens, Felcitas Beier, Patrick v. Jeetze
 #' @examples
 #' \dontrun{
-#' calcOutput("LanduseInitialisationBase")
+#' calcOutput("LanduseInitialisationBase", aggregate = FALSE)
 #' }
 calcLanduseInitialisationBase <- function(cells = "lpjcell", selectyears = "past_til2020") {
 
@@ -30,8 +30,8 @@ calcLanduseInitialisationBase <- function(cells = "lpjcell", selectyears = "past
       return(toolAggregate(x[getItems(target, dim = "iso"), , ], map, from = "from", to = "to"))
     }
     map <- data.frame(luh = c("c3ann", "c4ann", "c3per", "c4per", "c3nfx", "pastr", "range",
-                              "primf",      "secdf",    "secdf", "urban",     "primn",     "secdn"),
-                      lu  = c("crop",  "crop",  "crop",  "crop",  "crop",  "past", "range",
+                              "primf",      "secdf",      "secdf",    "urban", "primn", "secdn"),
+                      lu  = c("crop",  "crop",  "crop",  "crop",  "crop",  "past",  "range",
                               "primforest", "secdforest", "forestry", "urban", "other", "other"))
     lu <- toolAggregate(luh, map, dim = 3)
     # Attention: mapping maps secdf on both: secdforest and forestry (both contain after aggregation the full secondary
