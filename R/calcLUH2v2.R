@@ -26,23 +26,30 @@
 #' @importFrom magpiesets findset
 
 calcLUH2v2 <- function(landuse_types = "magpie", irrigation = FALSE, # nolint
-                       cellular = FALSE, cells = "lpjcell", selectyears = "past") {
+                       cellular = FALSE, cells = "lpjcell", selectyears = "past_til2020") {
 
   selectyears <- sort(findset(selectyears, noset = "original"))
+  selectyears <- as.integer(gsub("y", "", selectyears))
 
   if (!all(landuse_types %in% c("magpie", "LUH2v2", "flooded"))) {
     stop("Unknown lanuses_types = \"", landuse_types, "\"")
   }
 
   if (landuse_types == "flooded") {
-    x <- readSource("LUH2v2", subtype = "irrigation", convert = "onlycorrect")[, selectyears, "flood"]
+    x <- readSource("LUH2v2", subtype = "irrigation", convert = "onlycorrect")[, , "flood"]
+    cyears <- intersect(getYears(x, as.integer = TRUE), selectyears)
+    x <- x[, cyears, ]
   } else {
-    x <- readSource("LUH2v2", subtype = "states", convert = "onlycorrect")[, selectyears, ]
+    x <- readSource("LUH2v2", subtype = "states", convert = "onlycorrect")
+    cyears <- intersect(getYears(x, as.integer = TRUE), selectyears)
+    x <- x[, cyears, ]
     getSets(x, fulldim = FALSE)[3] <- "landuse"
 
     if (isTRUE(irrigation)) {
 
-      irrigLUH <- readSource("LUH2v2", subtype = "irrigation", convert = "onlycorrect")[, selectyears, ]
+      irrigLUH <- readSource("LUH2v2", subtype = "irrigation", convert = "onlycorrect")
+      cyears <- intersect(getYears(x, as.integer = TRUE), selectyears)
+      irrigLUH <- irrigLUH[, cyears, ]
 
       if (is.null(selectyears)) {
         vcat(verbosity = 3, "too many years may lead to memory problems if irrigation = TRUE")

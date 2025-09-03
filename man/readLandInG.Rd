@@ -26,7 +26,7 @@ A <- readSource("LandInG", subtype = "harvestedArea", aggregate = FALSE)
 
 }
 \seealso{
-\code{\link{readSource}}
+\code{\link[madrat]{readSource}}
 }
 \author{
 Felicitas Beier

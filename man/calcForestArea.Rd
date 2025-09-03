@@ -4,7 +4,7 @@
 \alias{calcForestArea}
 \title{calcForestArea}
 \usage{
-calcForestArea(selectyears = "past")
+calcForestArea(selectyears = "past_til2020")
 }
 \arguments{
 \item{selectyears}{defaults to past}

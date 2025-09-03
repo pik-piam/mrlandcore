@@ -4,12 +4,10 @@
 \alias{calcRicearea}
 \title{calcRicearea}
 \usage{
-calcRicearea(cellular = FALSE, cells = "lpjcell", share = TRUE)
+calcRicearea(cellular = FALSE, share = TRUE)
 }
 \arguments{
 \item{cellular}{If TRUE: calculates cellular rice area}
-
-\item{cells}{Switch between "magpiecell" (59199) and "lpjcell" (67420)}
 
 \item{share}{If TRUE: non-flooded share is returned.
 If FALSE: rice area (flooded, non-flooded, total) in Mha is returned}
