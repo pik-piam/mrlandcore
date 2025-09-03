@@ -37,9 +37,6 @@ calcOutput("LPJmL_new", subtype = "soilc", aggregate = FALSE)
 }
 
 }
-\seealso{
-[readLPJmL()]
-}
 \author{
 Kristine Karstens, Felicitas Beier
 }

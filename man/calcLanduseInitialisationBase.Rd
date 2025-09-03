@@ -9,7 +9,7 @@ calcLanduseInitialisationBase(cells = "lpjcell", selectyears = "past_til2020")
 \arguments{
 \item{cells}{"magpiecell" for 59199 cells or "lpjcell" for 67420 cells}
 
-\item{selectyears}{Years to be computed (default on "past")}
+\item{selectyears}{Years to be computed}
 }
 \value{
 Cellular landuse initialisation in its base configuration
@@ -22,7 +22,7 @@ more settings.
 }
 \examples{
 \dontrun{
-calcOutput("LanduseInitialisationBase")
+calcOutput("LanduseInitialisationBase", aggregate = FALSE)
 }
 }
 \author{

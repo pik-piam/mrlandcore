@@ -23,4 +23,5 @@ calcLUHTotalLandArea <- function(datasource = "LUH3") {
               isocountries = FALSE,
               description = paste0("The total land area in ", datasource),
               unit = "Mha"))
+
 }
