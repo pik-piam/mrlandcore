@@ -8,7 +8,6 @@ calcCroparea(
   sectoral = "kcr",
   physical = TRUE,
   cellular = FALSE,
-  cells = "lpjcell",
   irrigation = FALSE
 )
 }
@@ -21,15 +20,13 @@ calcCroparea(
 \item{physical}{if TRUE the sum over all crops agrees with the cropland area per country}
 
 \item{cellular}{if TRUE: calculates cellular MAgPIE crop area for all magpie croptypes.
-Crop area from LUH2 crop types (c3ann, c4ann, c3per, c4per, cnfx)
-are mapped to MAgpIE crop types using mappingLUH2cropsToMAgPIEcrops.csv.
-Harvested areas of FAO weight area within a specific LUH crop type
-to divide into MAgPIE crop types.}
-
-\item{cells}{Switch between "magpiecell" (59199) and "lpjcell" (67420)}
+Crop area from LUH3 crop types (c3ann, c4ann, c3per, c4per, cnfx)
+are mapped to MAgpIE crop types using "FAO2LUH2MAG_croptypes" and doing
+an intermediate step via harvested areas of FAO weight area within a
+specific LUH crop type to divide into MAgPIE crop types.}
 
 \item{irrigation}{If true: cellular areas are returned separated
-into irrigated and rainfed (see setup in calcLUH2v2)}
+into irrigated and rainfed (see setup in calcLUH3)}
 }
 \value{
 areas of individual crops from FAOSTAT and weight

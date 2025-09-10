@@ -72,8 +72,8 @@ calcLanduseInitialisationBase <- function(cells = "lpjcell", selectyears = "past
   }
 
   # cellular landuse area
-  luh <- calcOutput("LUH2v2", landuse_types = "LUH2v2", irrigation = FALSE, cellular = TRUE,
-                    selectyears = selectyears, cells = "lpjcell", aggregate = FALSE)
+  luh <- calcOutput("LUH3", landuseTypes = "LUH3", irrigation = FALSE, cellular = TRUE,
+                    yrs = selectyears, aggregate = FALSE)
   # country-level forest area
   forestArea <- calcOutput("ForestArea", selectyears = selectyears, aggregate = FALSE)
   # rename categories and split secondary forest into secondary forest and forestry
@@ -87,6 +87,9 @@ calcLanduseInitialisationBase <- function(cells = "lpjcell", selectyears = "past
   vegC  <- calcOutput("LPJmL_new", subtype = "vegc", stage = "smoothed",
                       version = "LPJmL4_for_MAgPIE_44ac93de", climatetype = "GSWP3-W5E5:historical",
                       aggregate = FALSE)
+
+  vegC <- toolFillYears(vegC, getYears(luh))
+
   cyears <- intersect(getYears(vegC, as.integer = TRUE), selectyears)
   vegC <- vegC[, cyears, ]
 
