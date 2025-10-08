@@ -59,6 +59,7 @@ calcForestArea <- function(selectyears = "past_til2020") {
   mapbiomasSecveg$NatRegForMha <- mapbiomasSecveg$NatRegFor / 1e6
   mapbiomasSecveg <- setNames(mapbiomasSecveg$NatRegForMha, mapbiomasSecveg$Year)
   yearsMapbiomas <- paste0("y", names(mapbiomasSecveg))
+  yearsMapbiomas <- intersect(yearsMapbiomas, years)
 
   for (yr in yearsMapbiomas) {
     # current value of NatRegFor
