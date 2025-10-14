@@ -71,7 +71,7 @@ calcForestArea <- function(selectyears = "past_til2020") {
   # fixing missing data on split between PrimFor (primforest), NatRegFor (secdforest)
   # and PlantFor (forestry) with LUH data
 
-  luh <- calcOutput("LUH3", landuseTypes = "LUH3", irrigation = FALSE, yrs = selectyears,
+  luh <- calcOutput("LUH3", landuseTypes = "LUH3", irrigation = FALSE, yrs = years,
                     cellular = FALSE, aggregate = FALSE)[, , c("primf", "secdf")]
   forest <- forest[, getYears(luh), ]
 
