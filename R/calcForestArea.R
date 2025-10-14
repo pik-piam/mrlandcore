@@ -1,21 +1,22 @@
-#' @title calcForestArea
-#' @description Calculates consistent forest area and its subcategories based on FAO_FRA2015
-#' and LanduseInitialisation data.
+#' calcForestArea
 #'
-#' @param selectyears defaults to past
+#' Calculates consistent forest area and its subcategories based on FAO_FRA2015
+#' (and FAO_FRA2020 only for forest plantations) and LanduseInitialisation data.
+#'
+#' @param selectyears passed to magpiesets::findset
 #' @return List of magpie object with results on country level, weight, unit and description.
+#'
 #' @author Kristine Karstens, Jan Philipp Dietrich
 #' @examples
 #' \dontrun{
 #' calcOutput("ForestArea")
 #' }
 #' @export
-
 calcForestArea <- function(selectyears = "past_til2020") {
 
-  years <- sort(findset(selectyears, noset = "original"))
+  years <- sort(magpiesets::findset(selectyears, noset = "original"))
 
-  forest   <- readSource("FAO_FRA2015", "fac")[, , c("Forest", "NatFor", "PrimFor", "NatRegFor", "PlantFor")]
+  forest <- readSource("FAO_FRA2015", "fac")[, , c("Forest", "NatFor", "PrimFor", "NatRegFor", "PlantFor")]
 
   # Plantation data is bit strange in FRA2015, we update this with FRA2020 data (but only till 2015)
   # We do this because FRA2020 has stopped reporting separately on primf and secdf
@@ -40,8 +41,8 @@ calcForestArea <- function(selectyears = "past_til2020") {
   # (sum of nat.reg.forest and planted forest)
   forest[, , "Forest"]   <- forest[, , "NatFor"] + forest[, , "PlantFor"]
 
-  forest   <- time_interpolate(forest, interpolated_year = years, integrate_interpolated_years = TRUE,
-                               extrapolation_type = "constant")[, years, ]
+  forest <- time_interpolate(forest, interpolated_year = years, integrate_interpolated_years = TRUE,
+                             extrapolation_type = "constant")[, years, ]
   vcat(verbosity = 3, "Forest is interpolated for missing years and held constant for the period before FAO starts")
 
   ### fix know issues
@@ -70,7 +71,7 @@ calcForestArea <- function(selectyears = "past_til2020") {
   # fixing missing data on split between PrimFor (primforest), NatRegFor (secdforest)
   # and PlantFor (forestry) with LUH data
 
-  luh <- calcOutput("LUH3", landuseTypes = "LUH3", irrigation = FALSE, yrs = selectyears,
+  luh <- calcOutput("LUH3", landuseTypes = "LUH3", irrigation = FALSE, yrs = years,
                     cellular = FALSE, aggregate = FALSE)[, , c("primf", "secdf")]
   forest <- forest[, getYears(luh), ]
 
@@ -93,8 +94,8 @@ calcForestArea <- function(selectyears = "past_til2020") {
   luhNatForestShare <- luhForest[, , c("PrimFor", "NatRegFor")] / dimSums(luhForest[, , c("PrimFor", "NatRegFor")],
                                                                           dim = 3)
 
-  miss         <- where(round(dimSums(forest[, , c("NatFor", "PlantFor")], dim = 3), 6) !=
-                          round(forest[, , "Forest"], 6))$true$regions
+  miss <- where(round(dimSums(forest[, , c("NatFor", "PlantFor")], dim = 3), 6) !=
+                  round(forest[, , "Forest"], 6))$true$regions
 
   if (length(miss) > 0) {
     forest[miss, , c("PlantFor", "PrimFor", "NatRegFor")] <- luhForestShare[miss, , ] *
@@ -102,8 +103,8 @@ calcForestArea <- function(selectyears = "past_til2020") {
     forest[miss, , "NatFor"] <- setNames(forest[miss, , "PrimFor"] + forest[miss, , "NatRegFor"], NULL)
   }
 
-  miss         <- where(round(dimSums(forest[, , c("PrimFor", "NatRegFor")], dim = 3), 6) !=
-                          round(forest[, , "NatFor"], 6))$true$regions
+  miss <- where(round(dimSums(forest[, , c("PrimFor", "NatRegFor")], dim = 3), 6) !=
+                  round(forest[, , "NatFor"], 6))$true$regions
   if (length(miss > 0)) {
     forest[miss, , c("PrimFor", "NatRegFor")] <- luhNatForestShare[miss, , ] * setNames(forest[miss, , "NatFor"], NULL)
   }
@@ -119,9 +120,10 @@ calcForestArea <- function(selectyears = "past_til2020") {
     warning("There are inconsistencies within the forest area data set.")
   }
 
+  out <- toolReplaceExpansion(out, "primforest", "secdforest", warnThreshold = 35)
+
   return(list(x = out,
               weight = NULL,
               unit = "Mha",
-              description = "Forest are and its subcategories")
-  )
+              description = "Forest area and its subcategories"))
 }

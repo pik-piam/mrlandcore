@@ -1,11 +1,11 @@
 #' @title calcLanduseInitialisationBase
 #' @description Calculates the cellular MAgPIE landuse initialisation area. Data from FAO on forestry is used
-#' to split the secondary forest pool of the LU2v2 dataset into forestry and secd_forest. This function
+#' to split the secondary forest pool of the LUH3 dataset into forestry and secdforest. This function
 #' returns the data set in a basic configuration. Use \code{\link{calcLanduseInitialisation}} for
 #' more settings.
 #'
 #' @param cells "magpiecell" for 59199 cells or "lpjcell" for 67420 cells
-#' @param selectyears Years to be computed (default on "past")
+#' @param selectyears Years to be computed
 #' @return Cellular landuse initialisation in its base configuration
 #' @author Jan Philipp Dietrich, Benjamin Leon Bodirsky, Kristine Karstens, Felcitas Beier, Patrick v. Jeetze
 #' @examples
@@ -127,6 +127,8 @@ calcLanduseInitialisationBase <- function(cells = "lpjcell", selectyears = "past
     }
     out[out < 0] <- 0
   }
+
+  out <- toolReplaceExpansion(out, "primforest", "secdforest", warnThreshold = 1)
 
   return(list(x = out,
               weight = NULL,

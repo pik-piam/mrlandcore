@@ -1,5 +1,5 @@
 #' @title toolForestRelocate
-#' @description Reallocates cellular forest information from LUH2
+#' @description Reallocates cellular forest information
 #'              to better match FAO forest information
 #'
 #' @param lu        uncorrected landuse initialisation data set (cell level)
@@ -7,12 +7,11 @@
 #' @param natTarget target natural land allocation on country level
 #' @param vegC      vegetation carbon data used as reallocation weight
 #' @return List of magpie object with results on cellular level
+#'
 #' @author Kristine Karstens, Jan Philipp Dietrich, Felicitas Beier, Patrick v. Jeetze
-#' @importFrom magclass setNames setItems new.magpie nyears
 #' @importFrom nleqslv nleqslv
 #'
 #' @export
-
 toolForestRelocate <- function(lu, luCountry, natTarget, vegC) { # nolint
 
   .arrayReduce <- function(x) {
