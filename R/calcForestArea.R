@@ -60,6 +60,11 @@ calcForestArea <- function(selectyears = "past_til2020") {
   mapbiomasSecveg$NatRegForMha <- mapbiomasSecveg$NatRegFor / 1e6
   mapbiomasSecveg <- setNames(mapbiomasSecveg$NatRegForMha, mapbiomasSecveg$Year)
   yearsMapbiomas <- paste0("y", names(mapbiomasSecveg))
+
+  # Ensure 'years' has the 'y' prefix if numeric
+  if (is.numeric(years)) {
+    years <- paste0("y", years)
+  }
   yearsMapbiomas <- intersect(yearsMapbiomas, years)
 
   for (yr in yearsMapbiomas) {
@@ -145,11 +150,11 @@ calcForestArea <- function(selectyears = "past_til2020") {
   # before applying the expansion tool, save original Brazil values
   outBrazilMapbiomas <- out["BRA", , , drop = FALSE]
   out <- toolReplaceExpansion(out, "primforest", "secdforest", warnThreshold = 35)
-  for (yr in yearsMapbiomas) {
-    primfMapbiomas <- outBrazilMapbiomas["BRA", yr, "primforest"]
-    secdfMapbiomas <- outBrazilMapbiomas["BRA", yr, "secdforest"]
-    out["BRA", yr, "primforest"] <- primfMapbiomas
-    out["BRA", yr, "secdforest"] <- secdfMapbiomas
+  for (y in yearsMapbiomas) {
+    primfMapbiomas <- outBrazilMapbiomas["BRA", y, "primforest"]
+    secdfMapbiomas <- outBrazilMapbiomas["BRA", y, "secdforest"]
+    out["BRA", y, "primforest"] <- primfMapbiomas
+    out["BRA", y, "secdforest"] <- secdfMapbiomas
   }
 
   return(list(x = out,
