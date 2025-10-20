@@ -142,7 +142,15 @@ calcForestArea <- function(selectyears = "past_til2020") {
     warning("There are inconsistencies within the forest area data set.")
   }
 
+  # before applying the expansion tool, save original Brazil values
+  outBrazilMapbiomas <- out["BRA", , , drop = FALSE]
   out <- toolReplaceExpansion(out, "primforest", "secdforest", warnThreshold = 35)
+  for (yr in yearsMapbiomas) {
+    primfMapbiomas <- outBrazilMapbiomas["BRA", yr, "primforest"]
+    secdfMapbiomas <- outBrazilMapbiomas["BRA", yr, "secdforest"]
+    out["BRA", yr, "primforest"] <- primfMapbiomas
+    out["BRA", yr, "secdforest"] <- secdfMapbiomas
+  }
 
   return(list(x = out,
               weight = NULL,
