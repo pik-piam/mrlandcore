@@ -7,14 +7,14 @@
 calcForestArea(selectyears = "past_til2020")
 }
 \arguments{
-\item{selectyears}{defaults to past}
+\item{selectyears}{passed to magpiesets::findset}
 }
 \value{
 List of magpie object with results on country level, weight, unit and description.
 }
 \description{
 Calculates consistent forest area and its subcategories based on FAO_FRA2015
-and LanduseInitialisation data.
+(and FAO_FRA2020 only for forest plantations) and LanduseInitialisation data.
 }
 \examples{
 \dontrun{
