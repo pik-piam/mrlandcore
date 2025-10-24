@@ -120,7 +120,7 @@ calcForestArea <- function(selectyears = "past_til2020") {
     warning("There are inconsistencies within the forest area data set.")
   }
 
-  out <- toolReplaceExpansion(out, "primforest", "secdforest", warnThreshold = 35)
+  out <- mrdownscale::toolReplaceExpansion(out, "primforest", "secdforest", warnThreshold = 35)
 
   return(list(x = out,
               weight = NULL,
