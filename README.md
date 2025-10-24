@@ -1,12 +1,14 @@
-# One-line description of this awesome package
+# Fundamental MAgPIE preprocessing functions including
+    calcLanduseInitialisation
 
-R package **mrlandcore**, version **1.6.2**
+R package **mrlandcore**, version **1.6.3**
 
 [![CRAN status](https://www.r-pkg.org/badges/version/mrlandcore)](https://cran.r-project.org/package=mrlandcore) [![R build status](https://github.com/pik-piam/mrlandcore/workflows/check/badge.svg)](https://github.com/pik-piam/mrlandcore/actions) [![codecov](https://codecov.io/gh/pik-piam/mrlandcore/branch/master/graph/badge.svg)](https://app.codecov.io/gh/pik-piam/mrlandcore) [![r-universe](https://pik-piam.r-universe.dev/badges/mrlandcore)](https://pik-piam.r-universe.dev/builds)
 
 ## Purpose and Functionality
 
-One-paragraph description of this awesome package.
+Fundamental MAgPIE preprocessing functions including
+    calcLanduseInitialisation.
 
 
 ## Installation
@@ -38,17 +40,18 @@ In case of questions / problems please contact Felicitas Beier <beier@pik-potsda
 
 To cite package **mrlandcore** in publications use:
 
-Beier F, Karstens K, Alves M, Philipp Dietrich J, Leon Bodirsky B, Hoetten D, Humpenoeder F, Heinke J, v. Jeetze P, Mishra A, Beier F, Wirth S, Chen D, Kreidenweis U (2025). "mrlandcore: One-line description of this awesome package." Version: 1.6.2, <https://github.com/pik-piam/mrlandcore>.
+Beier F, Karstens K, Alves M, Philipp Dietrich J, Leon Bodirsky B, Hoetten D, Humpenoeder F, Heinke J, v. Jeetze P, Mishra A, Beier F, Wirth S, Chen D, Kreidenweis U, Sauer P (2025). "mrlandcore: Fundamental MAgPIE preprocessing functions including calcLanduseInitialisation." Version: 1.6.3, <https://github.com/pik-piam/mrlandcore>.
 
 A BibTeX entry for LaTeX users is
 
  ```latex
 @Misc{,
-  title = {mrlandcore: One-line description of this awesome package},
-  author = {Felicitas Beier and Kristine Karstens and Marcos Alves and Jan {Philipp Dietrich} and Benjamin {Leon Bodirsky} and David Hoetten and Florian Humpenoeder and Jens Heinke and Patrick {v. Jeetze} and Abhijeet Mishra and Felcitas Beier and Stephen Wirth and David Chen and Ulrich Kreidenweis},
-  date = {2025-10-14},
+  title = {mrlandcore: Fundamental MAgPIE preprocessing functions including
+    calcLanduseInitialisation},
+  author = {Felicitas Beier and Kristine Karstens and Marcos Alves and Jan {Philipp Dietrich} and Benjamin {Leon Bodirsky} and David Hoetten and Florian Humpenoeder and Jens Heinke and Patrick {v. Jeetze} and Abhijeet Mishra and Felcitas Beier and Stephen Wirth and David Chen and Ulrich Kreidenweis and Pascal Sauer},
+  date = {2025-10-24},
   year = {2025},
   url = {https://github.com/pik-piam/mrlandcore},
-  note = {Version: 1.6.2},
+  note = {Version: 1.6.3},
 }
 ```

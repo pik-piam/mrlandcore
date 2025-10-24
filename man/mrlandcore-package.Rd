@@ -4,9 +4,9 @@
 \name{mrlandcore-package}
 \alias{mrlandcore}
 \alias{mrlandcore-package}
-\title{mrlandcore: One-line description of this awesome package}
+\title{mrlandcore: Fundamental MAgPIE preprocessing functions including calcLanduseInitialisation}
 \description{
-One-paragraph description of this awesome package.
+Fundamental MAgPIE preprocessing functions including calcLanduseInitialisation.
 }
 \seealso{
 Useful links:
@@ -33,6 +33,7 @@ Authors:
   \item Stephen Wirth
   \item David Chen
   \item Ulrich Kreidenweis
+  \item Pascal Sauer
 }
 
 }

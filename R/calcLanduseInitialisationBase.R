@@ -128,7 +128,8 @@ calcLanduseInitialisationBase <- function(cells = "lpjcell", selectyears = "past
     out[out < 0] <- 0
   }
 
-  out <- toolReplaceExpansion(out, "primforest", "secdforest", warnThreshold = 1)
+  out <- mrdownscale::toolScaleConstantArea(out, warnThreshold = 0.001)
+  out <- mrdownscale::toolReplaceExpansion(out, "primforest", "secdforest", warnThreshold = 1)
 
   return(list(x = out,
               weight = NULL,
