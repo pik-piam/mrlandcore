@@ -21,10 +21,32 @@
 calcLUH2MAgPIE <- function(share = "total", bioenergy = "ignore",
                            rice = "non_flooded", missing = "ignore") {
 
+  # proxy filling map in the case of `missing = "fill"`
+  proxyMapping <- c(
+    # Polar or Sub-polar with Iceland/Norway
+    ATF = "ISL", FLK = "ISL", GRL = "ISL", SGS = "ISL", HMD = "ISL", SJM = "NOR",
+    # Nordic or Baltic
+    ALA = "FIN",
+    # North Atlantic with France or UK or Canada
+    GGY = "FRA", JEY = "FRA", IMN = "GBR", SPM = "CAN",
+    # Middle East
+    PSE = "ISR",
+    # Caribbean with Dominican Republic or Cuba or Venezuela or USA
+    AIA = "DOM", MSR = "DOM", GLP = "DOM", MTQ = "DOM", VIR = "DOM",
+    CYM = "CUB", TCA = "CUB", CUW = "VEN", BMU = "USA",
+    # Indian Ocean with Sri Lanka or Indonesia
+    IOT = "LKA", CCK = "IDN", CXR = "IDN",
+    # South America/Africa
+    GUF = "SUR", ESH = "MAR", MYT = "MDG", REU = "MDG", SHN = "ZAF",
+    # Pacific with Philippines or PNG or Australia or New Zealand
+    ASM = "PHL", GUM = "PHL", MHL = "PHL", MNP = "PHL", PLW = "PHL", UMI = "PHL", WLF = "PHL",
+    FSM = "PNG", NFK = "AUS", PCN = "NZL"
+  )
+
   if (share == "total") {
 
     if (missing == "fill") {
-      warning("No missing data for total numbers assumend.")
+      warning("No missing data for total numbers assumed.")
     }
 
     FAOdata     <- calcOutput("Croparea", sectoral = "ProductionItem", # nolint : object_name_linter.
@@ -76,10 +98,6 @@ calcLUH2MAgPIE <- function(share = "total", bioenergy = "ignore",
     if (missing == "fill") {
       # check for countries/years where no data is reported from FAO and fill with proxy of similar country
       noData       <- where(dimSums(toolIso2CellCountries(x), dim = 3) == 0)$true$individual
-      proxyMapping <- c(ATF = "ISL", ESH = "MAR", FLK = "ISL", GRL = "ISL",
-                        PSE = "ISR", SGS = "ISL", SJM = "NOR",
-                        CIV = "GHA", GUF = "SUR", REU = "MUS", SSD = "CAF", SDN = "TCD")
-
       for (i in row(noData)[, 1]) {
         x[noData[i, "ISO"], noData[i, "Year"], ]  <- x[proxyMapping[noData[i, "ISO"]], noData[i, "Year"], ]
       }
@@ -115,9 +133,6 @@ calcLUH2MAgPIE <- function(share = "total", bioenergy = "ignore",
     if (missing == "fill") {
       # check for countries/years where no data is reported from FAO and fill with proxy
       noData       <- where(dimSums(toolIso2CellCountries(x), dim = 3) == 0)$true$individual
-      proxyMapping <- c(ATF = "ISL", ESH = "MAR", FLK = "ISL", GRL = "ISL",
-                        PSE = "ISR", SGS = "ISL", SJM = "NOR",
-                        CIV = "GHA", GUF = "SUR", REU = "MUS", SSD = "CAF", SDN = "TCD")
       for (i in row(noData)[, 1]) {
         x[noData[i, "ISO"], noData[i, "Year"], ]  <- x[proxyMapping[noData[i, "ISO"]], noData[i, "Year"], ]
       }
