@@ -18,8 +18,16 @@
 #' @importFrom magclass new.magpie getYears getNames
 
 calcMultipleCroppingZones <- function(layers = 2) {
+
   # Read in source
-  x <- readSource("GAEZv4", subtype = "MCzones", convert = "onlycorrect")
+  mcr <- readSource("GAEZv4", subtype = "mcr_CRUTS32_Hist_0010.tif", convert = "onlycorrect")
+  getNames(mcr) <- "rainfed"
+
+  mci <- readSource("GAEZv4", subtype = "mci_CRUTS32_Hist_0010.tif", convert = "onlycorrect")
+  getNames(mci) <- "irrigated"
+
+  # bind irrigated and rainfed multiple cropping suitability together
+  x  <- mbind(mci, mcr)
 
   if (layers == 8) {
 
