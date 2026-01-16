@@ -54,12 +54,8 @@ calcForestArea <- function(selectyears = "past_til2020") {
   forest["PSE", , "NatRegFor"]  <- 1 / 3 * forest["PSE", , "Forest"]
 
   # Fix Secondary Forest areas for Brazil using MapBiomas data
-  mapbiomasFile <- system.file("extdata", "mapbiomas_secVegetation.csv", package = "mrlandcore")
-  mapbiomasSecveg <- read.csv(mapbiomasFile)
-  mapbiomasSecveg$NatRegFor <- mapbiomasSecveg$Consolidated + mapbiomasSecveg$Recovery
-  mapbiomasSecveg$NatRegForMha <- mapbiomasSecveg$NatRegFor / 1e6
-  mapbiomasSecveg <- setNames(mapbiomasSecveg$NatRegForMha, mapbiomasSecveg$Year)
-  yearsMapbiomas <- paste0("y", names(mapbiomasSecveg))
+  mapbiomasSecveg <- calcOutput("MapBiomas", subtype = "SecVeg")
+  yearsMapbiomas <- dimnames(mapbiomasSecveg)[[2]]
 
   # Ensure 'years' has the 'y' prefix if numeric
   if (is.numeric(years)) {
@@ -71,7 +67,7 @@ calcForestArea <- function(selectyears = "past_til2020") {
     # current value of NatRegFor
     oldVal <- forest["BRA", yr, "NatRegFor"]
     # new value from mapbiomas
-    newVal <- mapbiomasSecveg[gsub("y", "", yr)]
+    newVal <- mapbiomasSecveg["BRA", yr, "SecVeg"]
     # difference
     diffVal <- oldVal - newVal
     # replace NatRegFor with new value
