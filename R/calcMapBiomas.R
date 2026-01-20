@@ -19,7 +19,7 @@ calcMapBiomas <- function(subtype = "SecVeg") {
   mag <- readSource("MapBiomas", subtype = subtype)
 
   # Aggregate secondary vegetation classes
-  mag <- dimSums(mag,dim = "variable")
+  mag <- dimSums(mag, dim = 3)
   names(dimnames(mag))[3] <- "variable"
   getItems(mag, dim = "variable") <- "SecVeg"
 
@@ -30,5 +30,20 @@ calcMapBiomas <- function(subtype = "SecVeg") {
   # Convert from ha to Mha
   mag <- mag / 1e6
 
-  return(mag)
+  mapping <- toolGetMapping(getConfig("regionmapping"), where = "mappingfolder", type = "regional")
+  countries <- unique(mapping$CountryCode)
+
+  out <- new.magpie(
+    cells_and_regions = countries,
+    years   = getItems(mag, "Year"),
+    names   = getItems(mag, "variable"),
+    fill    = 0
+  )
+
+  out["BRA", , ] <- mag["BRA", , ]
+
+  return(list(x = out,
+              weight = NULL,
+              unit = "Mha",
+              description = "Total secondary vegetation area for Brazil based on MapBiomas data"))
 }

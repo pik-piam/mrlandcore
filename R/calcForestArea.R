@@ -54,7 +54,7 @@ calcForestArea <- function(selectyears = "past_til2020") {
   forest["PSE", , "NatRegFor"]  <- 1 / 3 * forest["PSE", , "Forest"]
 
   # Fix Secondary Forest areas for Brazil using MapBiomas data
-  mapbiomasSecveg <- calcOutput("MapBiomas", subtype = "SecVeg")
+  mapbiomasSecveg <- calcOutput("MapBiomas", subtype = "SecVeg", aggregate = FALSE)
   yearsMapbiomas <- dimnames(mapbiomasSecveg)[[2]]
 
   # Ensure 'years' has the 'y' prefix if numeric
