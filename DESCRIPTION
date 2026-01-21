@@ -1,8 +1,9 @@
 Type: Package
 Package: mrlandcore
-Title: One-line description of this awesome package
-Version: 1.6.2.9001
-Date: 2025-09-11
+Title: Fundamental MAgPIE preprocessing functions including
+    calcLanduseInitialisation
+Version: 1.6.5
+Date: 2026-01-07
 Authors@R: c(
     person("Felicitas", "Beier", , "beier@pik-potsdam.de", role = c("aut", "cre")),
     person("Kristine", "Karstens", role = "aut"),
@@ -17,15 +18,17 @@ Authors@R: c(
     person("Felcitas", "Beier", role = "aut"),
     person("Stephen", "Wirth", role = "aut"),
     person("David", "Chen", role = "aut"),
-    person("Ulrich", "Kreidenweis", role = "aut")
+    person("Ulrich", "Kreidenweis", role = "aut"),
+    person("Pascal", "Sauer", role = "aut")
   )
-Description: One-paragraph description of this awesome package.
+Description: Fundamental MAgPIE preprocessing functions including
+    calcLanduseInitialisation.
 License: LGPL-3
 URL: https://github.com/pik-piam/mrlandcore
 Depends:
     madrat (>= 2.20.9),
     magclass (>= 3.17),
-    mrdownscale (>= 0.41.7),
+    mrdownscale (>= 0.43.0),
     mrdrivers (>= 1.0.0),
     mrfaocore (>= 1.0.0),
     mstools (>= 0.6.0),
@@ -46,4 +49,4 @@ Imports:
 Suggests:
     testthat
 Encoding: UTF-8
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3

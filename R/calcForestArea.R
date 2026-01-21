@@ -145,7 +145,7 @@ calcForestArea <- function(selectyears = "past_til2020") {
 
   # before applying the expansion tool, save original Brazil values
   outBrazilMapbiomas <- out["BRA", , , drop = FALSE]
-  out <- toolReplaceExpansion(out, "primforest", "secdforest", warnThreshold = 35)
+  out <- mrdownscale::toolReplaceExpansion(out, "primforest", "secdforest", warnThreshold = 35)
   for (y in yearsMapbiomas) {
     primfMapbiomas <- outBrazilMapbiomas["BRA", y, "primforest"]
     secdfMapbiomas <- outBrazilMapbiomas["BRA", y, "secdforest"]

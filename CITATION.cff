@@ -1,10 +1,12 @@
 cff-version: 1.2.0
 message: If you use this software, please cite it using the metadata from this file.
 type: software
-title: 'mrlandcore: One-line description of this awesome package'
-version: 1.6.2
-date-released: '2025-10-14'
-abstract: One-paragraph description of this awesome package.
+title: |-
+  mrlandcore: Fundamental MAgPIE preprocessing functions including
+      calcLanduseInitialisation
+version: 1.6.5
+date-released: '2026-01-07'
+abstract: Fundamental MAgPIE preprocessing functions including calcLanduseInitialisation.
 authors:
 - family-names: Beier
   given-names: Felicitas
@@ -35,6 +37,8 @@ authors:
   given-names: David
 - family-names: Kreidenweis
   given-names: Ulrich
+- family-names: Sauer
+  given-names: Pascal
 license: LGPL-3.0
 repository-code: https://github.com/pik-piam/mrlandcore
 
