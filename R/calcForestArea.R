@@ -53,6 +53,34 @@ calcForestArea <- function(selectyears = "past_til2020") {
   forest["PSE", , "PlantFor"]   <- 2 / 3 * forest["PSE", , "Forest"]
   forest["PSE", , "NatRegFor"]  <- 1 / 3 * forest["PSE", , "Forest"]
 
+  # Fix Secondary Forest areas for Brazil using MapBiomas data
+  mapbiomasSecveg <- calcOutput("MapBiomas", subtype = "SecVeg", aggregate = FALSE)
+  yearsMapbiomas <- dimnames(mapbiomasSecveg)[[2]]
+
+  # Ensure 'years' has the 'y' prefix if numeric
+  if (is.numeric(years)) {
+    years <- paste0("y", years)
+  }
+  yearsMapbiomas <- intersect(yearsMapbiomas, years)
+
+  for (yr in yearsMapbiomas) {
+    # current value of NatRegFor
+    oldVal <- forest["BRA", yr, "NatRegFor"]
+    # new value from mapbiomas
+    newVal <- mapbiomasSecveg["BRA", yr, "SecVeg"]
+    # difference
+    diffVal <- oldVal - newVal
+    # replace NatRegFor with new value
+
+    # apply changes only if diffVal is positive
+    if (diffVal[] > 0) {
+      # replace NatRegFor with new value
+      forest["BRA", yr, "NatRegFor"] <- newVal
+      # reallocate difference to PrimFor
+      forest["BRA", yr, "PrimFor"] <- forest["BRA", yr, "PrimFor"] + diffVal
+    }
+  }
+
   ### fixing inconsistencies assuming total forest areas and shares of subcategories are reported correctly
 
   forestSumSub                  <- dimSums(forest[, , c("NatFor", "PlantFor")], dim = 3)
