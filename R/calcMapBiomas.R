@@ -30,17 +30,15 @@ calcMapBiomas <- function(subtype = "SecVeg") {
   # Convert from ha to Mha
   mag <- mag / 1e6
 
-  mapping <- toolGetMapping(getConfig("regionmapping"), where = "mappingfolder", type = "regional")
-  countries <- unique(mapping$CountryCode)
+  # years to add before 1995
+  missingYears <- seq(1965, 1990, by = 5)
 
-  out <- new.magpie(
-    cells_and_regions = countries,
-    years   = getItems(mag, "Year"),
-    names   = getItems(mag, "variable"),
-    fill    = 0
-  )
+  # repeat the value of y1995 and set the Year dimnames before binding
+  magFilled <- mag[, "y1995", , drop = FALSE][, rep(1, length(missingYears)), , drop = FALSE]
+  dimnames(magFilled)$Year <- paste0("y", missingYears)
 
-  out["BRA", , ] <- mag["BRA", , ]
+  # combine with the existing magpie
+  out <- mbind(magFilled, mag)
 
   return(list(x = out,
               isocountries = FALSE,

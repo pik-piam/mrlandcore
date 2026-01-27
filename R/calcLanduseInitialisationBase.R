@@ -128,15 +128,8 @@ calcLanduseInitialisationBase <- function(cells = "lpjcell", selectyears = "past
     out[out < 0] <- 0
   }
 
-  # Before applying the expansion tool, save Brazil cells
-  brazilCells <- grepl("\\.BRA$", getItems(out, dim = 1))
-  outBrazil <- out[brazilCells, , , drop = FALSE]
-
   out <- mrdownscale::toolScaleConstantArea(out, warnThreshold = 0.001)
   out <- mrdownscale::toolReplaceExpansion(out, "primforest", "secdforest", warnThreshold = 1)
-
-  out[brazilCells, , ] <- outBrazil
-  warning(sum(brazilCells), " Brazil cells restored after expansion.")
 
   return(list(x = out,
               weight = NULL,

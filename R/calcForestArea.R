@@ -71,9 +71,14 @@ calcForestArea <- function(selectyears = "past_til2020") {
     # difference
     diffVal <- oldVal - newVal
     # replace NatRegFor with new value
-    forest["BRA", yr, "NatRegFor"] <- newVal
-    # reallocate the difference to PrimFor
-    forest["BRA", yr, "PrimFor"] <- forest["BRA", yr, "PrimFor"] + diffVal
+
+    # apply changes only if diffVal is positive
+    if (diffVal[] > 0) {
+      # replace NatRegFor with new value
+      forest["BRA", yr, "NatRegFor"] <- newVal
+      # reallocate difference to PrimFor
+      forest["BRA", yr, "PrimFor"] <- forest["BRA", yr, "PrimFor"] + diffVal
+    }
   }
 
   ### fixing inconsistencies assuming total forest areas and shares of subcategories are reported correctly
@@ -143,15 +148,7 @@ calcForestArea <- function(selectyears = "past_til2020") {
     warning("There are inconsistencies within the forest area data set.")
   }
 
-  # before applying the expansion tool, save original Brazil values
-  outBrazilMapbiomas <- out["BRA", , , drop = FALSE]
   out <- mrdownscale::toolReplaceExpansion(out, "primforest", "secdforest", warnThreshold = 35)
-  for (y in yearsMapbiomas) {
-    primfMapbiomas <- outBrazilMapbiomas["BRA", y, "primforest"]
-    secdfMapbiomas <- outBrazilMapbiomas["BRA", y, "secdforest"]
-    out["BRA", y, "primforest"] <- primfMapbiomas
-    out["BRA", y, "secdforest"] <- secdfMapbiomas
-  }
 
   return(list(x = out,
               weight = NULL,
