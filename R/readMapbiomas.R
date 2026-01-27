@@ -2,13 +2,13 @@
 #' @description
 #' Reads MapBiomas secondary vegetation time series data for Brazil and converts
 #' it into a magpie object that reflects the original CSV structure.
-#' Data were collected from the MapBiomas platform
+#' Data was collected from the MapBiomas platform
 #' (https://plataforma.brasil.mapbiomas.org/).
 #'
 #' @param subtype Data subtype (currently only "SecVeg")
 #'
 #' @return A magpie object with secondary vegetation classes for Brazil (ha)
-#' @author Wanderson Costa, Alex Koberle, Miodrag Stevanovic, Pascal Sauer
+#' @author Wanderson Costa, Alex Koberle, Miodrag Stevanovic
 #' @examples
 #' \dontrun{
 #' readSource("MapBiomas", subtype="SecVeg")
@@ -44,7 +44,7 @@ readMapBiomas <- function(subtype = "SecVeg") {
 
   # Create magpie object (raw structure)
   mag <- as.magpie(
-    x        = dat[, c(
+    x = dat[, c(
       "Year",
       "Consolidated.secondary.vegetation",
       "Recovery.to.Secondary.Vegetation"

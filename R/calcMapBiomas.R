@@ -7,7 +7,7 @@
 #' @param subtype Data subtype (currently only "SecVeg")
 #'
 #' @return A magpie object with total secondary vegetation area for Brazil (Mha)
-#' @author Wanderson Costa, Alex Koberle, Miodrag Stevanovic, Pascal Sauer
+#' @author Wanderson Costa, Alex Koberle, Miodrag Stevanovic
 #' @examples
 #' \dontrun{
 #' calcOutput("MapBiomas", subtype="SecVeg")
@@ -43,6 +43,7 @@ calcMapBiomas <- function(subtype = "SecVeg") {
   out["BRA", , ] <- mag["BRA", , ]
 
   return(list(x = out,
+              isocountries = FALSE,
               weight = NULL,
               unit = "Mha",
               description = "Total secondary vegetation area for Brazil based on MapBiomas data"))
