@@ -13,7 +13,7 @@
 #' calcOutput("Multicropping")
 #' }
 #'
-calcMulticropping <- function(irrigation = TRUE) {   # nolint
+calcMulticropping <- function(irrigation = TRUE) {
 
   phys   <- collapseNames(calcOutput("Croparea", physical = TRUE, cellular = TRUE,
                                              aggregate = FALSE, irrigation = irrigation))
