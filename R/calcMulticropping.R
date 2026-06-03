@@ -16,9 +16,9 @@
 calcMulticropping <- function(irrigation = TRUE) {
 
   phys   <- collapseNames(calcOutput("Croparea", physical = TRUE, cellular = TRUE,
-                                             aggregate = FALSE, irrigation = irrigation))
+                                     aggregate = FALSE, irrigation = irrigation))
   harv   <- collapseNames(calcOutput("Croparea", physical = FALSE, cellular = TRUE,
-                                             aggregate = FALSE, irrigation = irrigation))
+                                     aggregate = FALSE, irrigation = irrigation))
   out <- ifelse(phys > 0, harv / phys, NA)
 
   out[is.na(out)] <- 1
@@ -29,5 +29,6 @@ calcMulticropping <- function(irrigation = TRUE) {
   return(list(x           = out,
               weight      = phys,
               unit        = "ratio",
-              description = "Ratio of area harvested to phyiscal area, excluding fallow land"))
+              description = "Ratio of area harvested to phyiscal area, excluding fallow land",
+              isocountries = FALSE))
 }
