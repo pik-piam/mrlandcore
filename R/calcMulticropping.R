@@ -28,6 +28,7 @@ calcMulticropping <- function(irrigation = TRUE) {
 
   return(list(x           = out,
               weight      = phys,
+              aggregationArguments = list(zeroWeight = "fix"),
               unit        = "ratio",
               description = "Ratio of area harvested to phyiscal area, excluding fallow land",
               isocountries = FALSE))
