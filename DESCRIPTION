@@ -2,8 +2,8 @@ Type: Package
 Package: mrlandcore
 Title: Fundamental MAgPIE preprocessing functions including
     calcLanduseInitialisation
-Version: 1.7.1.9003
-Date: 2026-06-04
+Version: 1.7.1.9004
+Date: 2026-06-05
 Authors@R: c(
     person("Felicitas", "Beier", , "beier@pik-potsdam.de", role = c("aut", "cre")),
     person("Kristine", "Karstens", role = "aut"),
