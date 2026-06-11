@@ -24,10 +24,11 @@ calcMulticropping <- function(irrigation = TRUE) {
   out[is.na(out)] <- 1
 
   out  <- toolHoldConstantBeyondEnd(out)
-  phys <- toolHoldConstantBeyondEnd(phys) + 10^-30
+  phys <- toolHoldConstantBeyondEnd(phys)
 
   return(list(x           = out,
               weight      = phys,
+              aggregationArguments = list(zeroWeight = "fix"),
               unit        = "ratio",
               description = "Ratio of area harvested to phyiscal area, excluding fallow land",
               isocountries = FALSE))
