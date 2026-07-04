@@ -1,7 +1,6 @@
 #' @title calcLanduseInitialisation
 #' @description Calculates the cellular MAgPIE landuse initialisation area.
-#'              Data from FAO on forestry is used to split the secondary forest pool
-#'              of the LU2v2 dataset into forestry and secd_forest.
+#'              Most of the calculation happens in calcLanduseInitialisationBase.
 #'
 #' @param cellular cellular (TRUE) or country-level/regional (FALSE) data?
 #'                 For country-level vs regional data: remember to set "aggregate" to FALSE.
