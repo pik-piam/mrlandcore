@@ -20,6 +20,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Felicitas Beier \email{beier@pik-potsdam.de}
   \item Kristine Karstens
   \item Marcos Alves
   \item Jan Philipp Dietrich
