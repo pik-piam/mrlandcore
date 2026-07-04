@@ -9,3 +9,5 @@
 ^.lintr$
 ^tests/.lintr$
 ^codecov\.yml$
+^\.claude$
+^_pkgdown\.yml$

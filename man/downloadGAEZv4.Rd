@@ -8,7 +8,7 @@ downloadGAEZv4(subtype = NULL)
 }
 \arguments{
 \item{subtype}{Name of file to be downloaded
-Available are for example:
+Available subtypes are for example:
 "mci_CRUTS32_Hist_0010.tif" (irrigated multiple cropping suitability for years 2000-2010),
 "mcr_CRUTS32_Hist_0010.tif" (rainfed multiple cropping suitability for years 2000-2010)}
 }
