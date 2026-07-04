@@ -30,7 +30,6 @@ Marcos Alves, Felicitas Beier
 ## Examples
 
 ``` r
-
 if (FALSE) { # \dontrun{
 readSource("LPJmLClimateInput_new", subtype, convert="onlycorrect")
 } # }

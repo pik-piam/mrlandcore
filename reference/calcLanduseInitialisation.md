@@ -1,8 +1,7 @@
 # calcLanduseInitialisation
 
-Calculates the cellular MAgPIE landuse initialisation area. Data from
-FAO on forestry is used to split the secondary forest pool of the LU2v2
-dataset into forestry and secd_forest.
+Calculates the cellular MAgPIE landuse initialisation area. Most of the
+calculation happens in calcLanduseInitialisationBase.
 
 ## Usage
 
@@ -26,6 +25,9 @@ calcLanduseInitialisation(
 - nclasses:
 
   options are either "six", "seven" or "nine".
+
+  - "five" aggregates forestry and forest, includes "crop", "past",
+    "forest", "urban" and "other"
 
   - "six" includes the original land use classes "crop", "past",
     "forestry", "forest", "urban" and "other"
@@ -61,11 +63,3 @@ on cellular level, unit and description.
 
 Jan Philipp Dietrich, Benjamin Leon Bodirsky, Kristine Karstens,
 Felcitas Beier, Patrick v. Jeetze
-
-## Examples
-
-``` r
-if (FALSE) { # \dontrun{
-calcOutput("LanduseInitialisation")
-} # }
-```

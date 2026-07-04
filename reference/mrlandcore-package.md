@@ -15,6 +15,8 @@ Useful links:
 
 Authors:
 
+- Felicitas Beier <beier@pik-potsdam.de>
+
 - Kristine Karstens
 
 - Marcos Alves
