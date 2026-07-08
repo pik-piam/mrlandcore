@@ -1,12 +1,12 @@
 #' @title calcLanduseInitialisation
 #' @description Calculates the cellular MAgPIE landuse initialisation area.
-#'              Data from FAO on forestry is used to split the secondary forest pool
-#'              of the LU2v2 dataset into forestry and secd_forest.
+#'              Most of the calculation happens in calcLanduseInitialisationBase.
 #'
 #' @param cellular cellular (TRUE) or country-level/regional (FALSE) data?
 #'                 For country-level vs regional data: remember to set "aggregate" to FALSE.
 #' @param nclasses options are either "six", "seven" or "nine".
 #' \itemize{
+#' \item "five" aggregates forestry and forest, includes "crop", "past", "forest", "urban" and "other"
 #' \item "six" includes the original land use classes "crop", "past", "forestry", "forest", "urban" and "other"
 #' \item "seven" separates primary and secondary forest and includes "crop", "past", "forestry", "primforest",
 #' "secdforest", "urban" and "other"
@@ -21,13 +21,6 @@
 #' @return List of magpie object with results on country or cellular level, weight on cellular level,
 #' unit and description.
 #' @author Jan Philipp Dietrich, Benjamin Leon Bodirsky, Kristine Karstens, Felcitas Beier, Patrick v. Jeetze
-#' @examples
-#' \dontrun{
-#' calcOutput("LanduseInitialisation")
-#' }
-#' @importFrom magclass setNames where
-
-
 calcLanduseInitialisation <- function(cellular = FALSE, nclasses = "seven",
                                       cells = "lpjcell", selectyears = "past_til2020",
                                       input_magpie = FALSE) { # nolint
@@ -57,6 +50,8 @@ calcLanduseInitialisation <- function(cellular = FALSE, nclasses = "seven",
                       seven = c("crop", "past", "past", "forestry", "primforest", "secdforest",
                                 "urban", "other", "other"),
                       six   = c("crop", "past", "past", "forestry", "forest", "forest",
+                                "urban", "other", "other"),
+                      five  = c("crop", "past", "past", "forest", "forest", "forest",
                                 "urban", "other", "other"))
     if (!(nclasses %in% names(map))) stop("unknown nclasses setting \"", nclasses, "\"")
     out <- toolAggregate(out, rel = map, dim = 3, from = "nine", to = nclasses)

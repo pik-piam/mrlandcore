@@ -18,6 +18,7 @@ For country-level vs regional data: remember to set "aggregate" to FALSE.}
 
 \item{nclasses}{options are either "six", "seven" or "nine".
 \itemize{
+\item "five" aggregates forestry and forest, includes "crop", "past", "forest", "urban" and "other"
 \item "six" includes the original land use classes "crop", "past", "forestry", "forest", "urban" and "other"
 \item "seven" separates primary and secondary forest and includes "crop", "past", "forestry", "primforest",
 "secdforest", "urban" and "other"
@@ -39,13 +40,7 @@ unit and description.
 }
 \description{
 Calculates the cellular MAgPIE landuse initialisation area.
-             Data from FAO on forestry is used to split the secondary forest pool
-             of the LU2v2 dataset into forestry and secd_forest.
-}
-\examples{
-\dontrun{
-calcOutput("LanduseInitialisation")
-}
+             Most of the calculation happens in calcLanduseInitialisationBase.
 }
 \author{
 Jan Philipp Dietrich, Benjamin Leon Bodirsky, Kristine Karstens, Felcitas Beier, Patrick v. Jeetze
