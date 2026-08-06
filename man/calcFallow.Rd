@@ -18,7 +18,7 @@ MAgPIE object containing fallow land in Mha
 }
 \description{
 Returns fallow land of our default datasource.
-The estimates are scaled to match our Land classes in the Croparea function.
+The estimates are scaled to match the land classes in the calcCroparea function.
 Due to multiple cropping, harvested cropland area can be greater than non-fallow land area
 and even greater than physical cropland area.
 }
@@ -31,5 +31,5 @@ calcOutput("Fallow")
 \code{\link{readLandInG}}
 }
 \author{
-David Hoetten, Felicitas Beier
+David Hoetten, Felicitas Beier, Benjamin Bodirsky
 }

@@ -43,5 +43,5 @@ Calculates the cellular MAgPIE landuse initialisation area.
              Most of the calculation happens in calcLanduseInitialisationBase.
 }
 \author{
-Jan Philipp Dietrich, Benjamin Leon Bodirsky, Kristine Karstens, Felcitas Beier, Patrick v. Jeetze
+Jan Philipp Dietrich, Benjamin Leon Bodirsky, Kristine Karstens, Felicitas Beier, Patrick v. Jeetze
 }
