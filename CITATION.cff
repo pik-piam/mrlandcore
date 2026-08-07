@@ -4,8 +4,8 @@ type: software
 title: |-
   mrlandcore: Fundamental MAgPIE preprocessing functions including
       calcLanduseInitialisation
-version: 1.8.0
-date-released: '2026-08-06'
+version: 1.8.1
+date-released: '2026-08-07'
 abstract: Fundamental MAgPIE preprocessing functions including calcLanduseInitialisation.
 authors:
 - family-names: Beier

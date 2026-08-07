@@ -64,8 +64,9 @@ calcLUH3 <- function(landuseTypes = "magpie", irrigation = FALSE,
   if (isTRUE(irrigation)) {
     crops <- c("c3ann", "c3per", "c4ann", "c4per", "c3nfx")
     irrigLUH <- readSource("LUH3", "management", yrs, convert = FALSE)
+    # drop the unused management variables while the raster is still lazy,
+    irrigLUH <- irrigLUH[[grep("\\.\\.irrig_", names(irrigLUH))]]
     irrigLUH <- as.magpie(irrigLUH)
-    irrigLUH <- irrigLUH[, , paste0("irrig_", crops)]
     stopifnot(0 <= irrigLUH, irrigLUH <= 1)
 
     getNames(irrigLUH) <- crops

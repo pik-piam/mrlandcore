@@ -28,7 +28,7 @@ calculates a multiple cropping factor based on area harvested,
 }
 \examples{
 \dontrun{
-calcOutput("calcMulticroppingOld")
+calcOutput("MulticroppingOld")
 }
 
 }

@@ -24,8 +24,9 @@ calcRicearea <- function(cellular = FALSE, share = TRUE) {
   # Country-level LUH flooded areas
   floodedLUHiso  <- collapseNames(calcOutput("LUH3flood", aggregate = FALSE))
 
-  # FAO rice areas (physical to be comparable with LUH)
-  riceareaFAOiso <- collapseNames(calcOutput("Croparea", sectoral = "kcr", physical = TRUE,
+  # FAO rice areas according to FAO (physical to be comparable with LUH)
+  riceareaFAOiso <- collapseNames(calcOutput("CropareaFAOLUH",
+                                             sectoral = "kcr", physical = TRUE,
                                              cellular = FALSE, irrigation = FALSE,
                                              aggregate = FALSE)[, , "rice_pro"])
 

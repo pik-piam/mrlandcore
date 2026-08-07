@@ -4,23 +4,19 @@
 \alias{calcFallow}
 \title{calcFallow}
 \usage{
-calcFallow(cellular = FALSE, physical = TRUE)
+calcFallow(cellular = FALSE)
 }
 \arguments{
-\item{cellular}{TRUE for cellular outputs.}
-
-\item{physical}{if TRUE it returns the physical area, with fallow of multicropping systems being
-scaled to match physical areas of the rotation, if FALSE the area harvested
-being fallow is returned}
+\item{cellular}{TRUE for cellular outputs}
 }
 \value{
 MAgPIE object containing fallow land in Mha
 }
 \description{
-Returns fallow land of our default datasource.
-The estimates are scaled to match the land classes in the calcCroparea function.
-Due to multiple cropping, harvested cropland area can be greater than non-fallow land area
-and even greater than physical cropland area.
+Returns fallow land calculated based on physical cropland extent
+             and harvested area output of default croparea datasource.
+             The resultant areas are scaled to match the land croparea land
+             class of calcLanduseInitialisation.
 }
 \examples{
 \dontrun{
