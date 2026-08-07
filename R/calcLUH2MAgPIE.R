@@ -48,16 +48,8 @@ calcLUH2MAgPIE <- function(share = "total", bioenergy = "ignore",
       warning("No missing data for total numbers assumed.")
     }
 
-    # BLB: Shouldnt this rather use FAOharmonized?
-    cropPrim <- readSource("FAO_online", "CropLive2010")[, , "area_harvested"]
-    # use linear_interpolate
-    fodder   <- readSource("FAO", "Fodder")[, , "area_harvested"]
-    fodder   <- toolExtrapolateFodder(fodder, endyear = max(getYears(cropPrim, as.integer = TRUE)))
-    data     <- toolFAOcombine(cropPrim, fodder) / 10^6 # convert to Mha
-    data[is.na(data)] <- 0
-    data <- collapseNames(data)
-    # not more precision than 1 ha needed. very small areas can make problems in some weighting scripts
-    FAOdata <- round(data, 6)
+    FAOdata <- calcOutput("CropareaFAOLUH", sectoral = "ProductionItem", # nolint : object_name_linter
+                          physical = FALSE, aggregate = FALSE)
 
     if (rice == "non_flooded") {
       # Rice areas are pre-determined by areas reported as flooded in LUH.
