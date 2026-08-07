@@ -290,5 +290,5 @@ calcCropareaLandInG <- function(sectoral = "kcr", physical = TRUE, cellular = FA
               weight = NULL,
               description = "Croparea for different croptypes",
               unit = "Mha",
-              isocountries = FALSE))
+              isocountries = !cellular))
 }
