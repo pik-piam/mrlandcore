@@ -19,7 +19,7 @@
 #' [calcCroparea()]
 #' @examples
 #' \dontrun{
-#' calcOutput("calcMulticroppingOld")
+#' calcOutput("MulticroppingOld")
 #' }
 #'
 calcMulticroppingOld <- function(extend_future = FALSE, factortype = "CI") {   # nolint
