@@ -26,6 +26,6 @@ calcFallow <- function(cellular = FALSE) {
               weight = NULL,
               description = "Fallow land",
               unit = "Mha",
-              isocountries = FALSE))
+              isocountries = !cellular))
 
 }
