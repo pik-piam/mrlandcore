@@ -117,7 +117,6 @@ calcCroparea <- function(sectoral = "kcr", physical = TRUE, fallow = FALSE,
       }
 
       croparea    <- cropareaCalibrated
-      description <- paste0(description, " including fallow land.")
 
     } else {
       # To speed up, aggregation is done with recursively
