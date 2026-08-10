@@ -58,6 +58,20 @@ calcCroparea <- function(sectoral = "kcr", physical = TRUE, fallow = FALSE,
 
         multiFactor <- cropareaMulti / croparea
         multiFactor <- ifelse(test = is.nan(multiFactor), 1, multiFactor)
+
+        # Cap the multicropping factor at 3 harvests per year. Inconsistencies
+        # between the physical and the harvested area data set can produce
+        # unrealistically high factors in edge cases, and three harvests per year
+        # is the defensible ceiling. Report when this stops being an edge case,
+        # i.e. when the physical area affected exceeds 10 Mha globally in a year.
+        cappedArea <- dimSums(croparea * (multiFactor > 3), dim = c(1, 3), na.rm = TRUE)
+        if (max(cappedArea) > 10) {
+          vcat(1, "Multicropping factor exceeded 3 on",
+               round(max(cappedArea), digits = 1), "Mha of physical cropland in",
+               getItems(cappedArea, dim = 2)[which.max(as.vector(cappedArea))],
+               "and was truncated to 3 \n")
+        }
+
         multiFactor <- ifelse(test = multiFactor > 3, 3, multiFactor)
         multiFactor <- add_columns(x = multiFactor, addnm = "fallow",
                                    dim = "crop", fill = 1)
