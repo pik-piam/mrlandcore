@@ -14,9 +14,9 @@
 #' @export
 calcForestArea <- function() {
 
-  # set yearly time steps for historical trime frame for forest area calculation
+  # set yearly time steps for historical time frame for forest area calculation
   histyears <- sort(magpiesets::findset("past_til2020"))
-  startyear <- as.integer(gsub("y", "", histyears[[1]]))
+  startyear <- 1960
   endyear   <- as.integer(gsub("y", "", tail(histyears, 1)))
   years     <- paste0("y", seq(from = startyear, to = endyear, by = 1))
 
