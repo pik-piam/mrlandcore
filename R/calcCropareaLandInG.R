@@ -10,7 +10,6 @@
 #'                    agrees with the physical cropland of readLandInG(subtype = physical)
 #' @param cellular    if TRUE: calculates cellular crop area for all magpie croptypes.
 #'                    Option FALSE is not (yet) available.
-#' @param cells       Switch between "magpiecell" (59199) and "lpjcell" (67420)
 #' @param irrigation  If true: cellular areas are returned separated
 #'                    into irrigated and rainfed
 #' @param selectyears extract certain years from the data
@@ -27,7 +26,7 @@
 #' @importFrom mstools toolHoldConstant
 #'
 calcCropareaLandInG <- function(sectoral = "kcr", physical = TRUE, cellular = FALSE,
-                                cells = "magpiecell", irrigation = FALSE, selectyears = "all",
+                                irrigation = FALSE, selectyears = "all",
                                 lpjml = c(natveg = "LPJmL4_for_MAgPIE_44ac93de",
                                           crop = "ggcmi_phase3_nchecks_bft_e511ac58"),
                                 climatetype = "GSWP3-W5E5:historical") {
@@ -50,7 +49,7 @@ calcCropareaLandInG <- function(sectoral = "kcr", physical = TRUE, cellular = FA
 
   ### Calculations ###
   # read in fallow land (for check below)
-  fallow <- calcOutput("FallowLand", aggregate = FALSE)
+  fallow <- calcOutput("FallowLandInG", aggregate = FALSE, cellular = TRUE)
 
   # year selection
   if (any(selectyears == "all")) {
@@ -280,15 +279,6 @@ calcCropareaLandInG <- function(sectoral = "kcr", physical = TRUE, cellular = FA
       # fill missing countries with 0
       cropArea <- toolConditionalReplace(x = toolCountryFill(cropArea),
                                          conditions = "is.na()", replaceby = 0)
-    } else {
-      if (cells == "magpiecell") {
-        cropArea <- toolCoord2Isocell(cropArea)
-      } else if (cells == "lpjcell") {
-        # this is already the format of cropArea
-      } else {
-        stop("This value for the cell parameter is not supported,
-          choose between \"magpiecell\" and \"lpjcell\"")
-      }
     }
     cropAreaList[[y]] <- cropArea
   }
@@ -300,5 +290,5 @@ calcCropareaLandInG <- function(sectoral = "kcr", physical = TRUE, cellular = FA
               weight = NULL,
               description = "Croparea for different croptypes",
               unit = "Mha",
-              isocountries = FALSE))
+              isocountries = !cellular))
 }

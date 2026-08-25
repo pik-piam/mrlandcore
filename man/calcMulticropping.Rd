@@ -4,25 +4,18 @@
 \alias{calcMulticropping}
 \title{calcMulticropping}
 \usage{
-calcMulticropping(extend_future = FALSE, factortype = "CI")
+calcMulticropping(irrigation = TRUE)
 }
 \arguments{
-\item{extend_future}{if TRUE}
-
-\item{factortype}{CI: cropping intensity factor calculated as ratio of
-    harvested to physical area where values above one
-    indicate multicropping, below one fallow land (default)
-MC: multiple cropping factor indicating areas that are
-    harvested more than once in one year calculated taking
-    fallow land into account explicitly:
-    harvestedArea / (physicalArea - fallowLand)}
+\item{irrigation}{report irrigated and non-irrigated areas separately}
 }
 \value{
 List of magpie objects with results on country level, weight on country level, unit and description.
 }
 \description{
-calculates a multiple cropping factor based on area harvested,
-             physical cropland area (and optionally fallow land).
+Multicropping factor, telling how many harvests are produced
+on one unit of physical area. Fallow lands are not counted in, so the factor
+is always larger than 1.
 }
 \examples{
 \dontrun{
@@ -31,9 +24,8 @@ calcOutput("Multicropping")
 
 }
 \seealso{
-[calcFAOLand()],
 [calcCroparea()]
 }
 \author{
-Benjamin Leon Bodirsky, David Chen, Felicitas Beier
+Benjamin Leon Bodirsky, Felicitas Beier
 }

@@ -27,7 +27,7 @@ MAGofLUH (for share of kcr within LUH types)}
 List of magpie objects with results on country level, weight on country level, unit and description
 }
 \description{
-Calculates the real aggregation of LUH croptypes to MAgPIE croptypes
+Calculates the relation matrix for LUH croptype and MAgPIE croptype areas
              out of LUH2FAO and FAO2MAgPIE mappings
 }
 \examples{

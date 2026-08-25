@@ -1,6 +1,6 @@
 # Fundamental MAgPIE preprocessing functions including calcLanduseInitialisation
 
-R package **mrlandcore**, version **1.8.3**
+R package **mrlandcore**, version **1.9.0**
 
    [![R build status](https://github.com/pik-piam/mrlandcore/workflows/check/badge.svg)](https://github.com/pik-piam/mrlandcore/actions) [![codecov](https://codecov.io/gh/pik-piam/mrlandcore/branch/master/graph/badge.svg)](https://app.codecov.io/gh/pik-piam/mrlandcore) [![r-universe](https://pik-piam.r-universe.dev/badges/mrlandcore)](https://pik-piam.r-universe.dev/builds)
 
@@ -48,9 +48,9 @@ A BibTeX entry for LaTeX users is
   title = {mrlandcore: Fundamental MAgPIE preprocessing functions including
     calcLanduseInitialisation},
   author = {Felicitas Beier and Kristine Karstens and Marcos Alves and Jan {Philipp Dietrich} and Benjamin {Leon Bodirsky} and David Hoetten and Florian Humpenoeder and Jens Heinke and Patrick {v. Jeetze} and Abhijeet Mishra and Felcitas Beier and Stephen Wirth and David Chen and Ulrich Kreidenweis and Pascal Sauer},
-  date = {2026-08-24},
+  date = {2026-08-10},
   year = {2026},
   url = {https://github.com/pik-piam/mrlandcore},
-  note = {Version: 1.8.3},
+  note = {Version: 1.9.0},
 }
 ```
