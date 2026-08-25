@@ -39,7 +39,7 @@ In case of questions / problems please contact Felicitas Beier <beier@pik-potsda
 
 To cite package **mrlandcore** in publications use:
 
-Beier F, Karstens K, Alves M, Philipp Dietrich J, Leon Bodirsky B, Hoetten D, Humpenoeder F, Heinke J, v. Jeetze P, Mishra A, Beier F, Wirth S, Chen D, Kreidenweis U, Sauer P (2026). "mrlandcore: Fundamental MAgPIE preprocessing functions including calcLanduseInitialisation." Version: 1.9.0, <https://github.com/pik-piam/mrlandcore>.
+Beier F, Karstens K, Alves M, Philipp Dietrich J, Leon Bodirsky B, Hoetten D, Humpenoeder F, Heinke J, v. Jeetze P, Mishra A, Beier F, Wirth S, Chen D, Kreidenweis U, Sauer P (2026). "mrlandcore: Fundamental MAgPIE preprocessing functions including calcLanduseInitialisation." Version: 1.8.3, <https://github.com/pik-piam/mrlandcore>.
 
 A BibTeX entry for LaTeX users is
 
