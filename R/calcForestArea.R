@@ -16,6 +16,11 @@ calcForestArea <- function(selectyears = "past_til2020") {
 
   years <- sort(magpiesets::findset(selectyears, noset = "original"))
 
+  # Ensure 'years' has the 'y' prefix if numeric
+  if (is.numeric(years)) {
+    years <- paste0("y", years)
+  }
+
   forest <- readSource("FAO_FRA2015", "fac")[, , c("Forest", "NatFor", "PrimFor", "NatRegFor", "PlantFor")]
 
   # Plantation data is bit strange in FRA2015, we update this with FRA2020 data (but only till 2015)
@@ -53,6 +58,14 @@ calcForestArea <- function(selectyears = "past_til2020") {
   forest["PSE", , "PlantFor"]   <- 2 / 3 * forest["PSE", , "Forest"]
   forest["PSE", , "NatRegFor"]  <- 1 / 3 * forest["PSE", , "Forest"]
 
+  # Fix Secondary Forest areas for Brazil using MapBiomas data
+  mapbiomasSecveg <- calcOutput("MapBiomas", subtype = "SecVeg", aggregate = FALSE)
+  yearsMapbiomas <- intersect(getYears(mapbiomasSecveg), years)
+  mapbiomasSecveg <- mapbiomasSecveg[, yearsMapbiomas, ]
+  forest["BRA", yearsMapbiomas, "PrimFor"] <- dimSums(forest["BRA", yearsMapbiomas, c("NatRegFor", "PrimFor")],
+                                                      dim = 3) - mapbiomasSecveg
+  forest["BRA", yearsMapbiomas, "NatRegFor"] <- mapbiomasSecveg
+
   ### fixing inconsistencies assuming total forest areas and shares of subcategories are reported correctly
 
   forestSumSub                  <- dimSums(forest[, , c("NatFor", "PlantFor")], dim = 3)
@@ -87,7 +100,7 @@ calcForestArea <- function(selectyears = "past_til2020") {
   forestry <- luh[, , "secdf"] - secondaryForest
 
   luhForest <- mbind(setNames(forestry, "PlantFor"),
-                     setNames(luh[, , c("primf")], "PrimFor"),
+                     setNames(luh[, , "primf"], "PrimFor"),
                      setNames(secondaryForest, "NatRegFor")) + 10^-10
   # 10^-10 added to allow share estimation even under missing area information
   luhForestShare <- luhForest / dimSums(luhForest, dim = 3)
@@ -125,5 +138,6 @@ calcForestArea <- function(selectyears = "past_til2020") {
   return(list(x = out,
               weight = NULL,
               unit = "Mha",
+              min = 0,
               description = "Forest area and its subcategories"))
 }
