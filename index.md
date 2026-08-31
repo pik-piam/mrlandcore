@@ -1,6 +1,6 @@
 # Fundamental MAgPIE preprocessing functions including calcLanduseInitialisation
 
-R package **mrlandcore**, version **1.8.3**
+R package **mrlandcore**, version **1.8.4**
 
 [![R build
 status](https://github.com/pik-piam/mrlandcore/workflows/check/badge.svg)](https://github.com/pik-piam/mrlandcore/actions)
@@ -52,7 +52,7 @@ Beier F, Karstens K, Alves M, Philipp Dietrich J, Leon Bodirsky B,
 Hoetten D, Humpenoeder F, Heinke J, v. Jeetze P, Mishra A, Beier F,
 Wirth S, Chen D, Kreidenweis U, Sauer P (2026). “mrlandcore: Fundamental
 MAgPIE preprocessing functions including calcLanduseInitialisation.”
-Version: 1.8.3, <https://github.com/pik-piam/mrlandcore>.
+Version: 1.8.4, <https://github.com/pik-piam/mrlandcore>.
 
 A BibTeX entry for LaTeX users is
 
@@ -64,6 +64,6 @@ A BibTeX entry for LaTeX users is
  date = {2026-08-24},
  year = {2026},
  url = {https://github.com/pik-piam/mrlandcore},
- note = {Version: 1.8.3},
+ note = {Version: 1.8.4},
 }
 ```

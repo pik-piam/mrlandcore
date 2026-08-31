@@ -41,12 +41,12 @@ Beier F, Karstens K, Alves M, Philipp Dietrich J, Leon Bodirsky B,
 Hoetten D, Humpenoeder F, Heinke J, v. Jeetze P, Mishra A, Beier F,
 Wirth S, Chen D, Kreidenweis U, Sauer P (2026). *mrlandcore: Fundamental
 MAgPIE preprocessing functions including calcLanduseInitialisation*. R
-package version 1.8.3, <https://github.com/pik-piam/mrlandcore>.
+package version 1.8.4, <https://github.com/pik-piam/mrlandcore>.
 
     @Manual{,
       title = {mrlandcore: Fundamental MAgPIE preprocessing functions including calcLanduseInitialisation},
       author = {Felicitas Beier and Kristine Karstens and Marcos Alves and Jan {Philipp Dietrich} and Benjamin {Leon Bodirsky} and David Hoetten and Florian Humpenoeder and Jens Heinke and Patrick {v. Jeetze} and Abhijeet Mishra and Felcitas Beier and Stephen Wirth and David Chen and Ulrich Kreidenweis and Pascal Sauer},
       year = {2026},
-      note = {R package version 1.8.3},
+      note = {R package version 1.8.4},
       url = {https://github.com/pik-piam/mrlandcore},
     }
