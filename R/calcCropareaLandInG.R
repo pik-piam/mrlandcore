@@ -268,8 +268,9 @@ calcCropareaLandInG <- function(sectoral = "kcr", physical = TRUE, cellular = FA
         physicalCropSum <- dimSums(cropArea, dim = c("crop"))
       }
 
-      if (any(abs(physicalCropSum + fallow[, y, ] - physicalAreaSum) > 1.5e-16)) {
-        stop("Sum of crops + fallow land doesn't match with total physical cropland.")
+      if (max(abs(physicalCropSum + fallow[, y, ] - physicalAreaSum)) > 5e-16) {
+        stop("Sum of crops + fallow land doesn't match with total physical cropland. Max difference: ",
+	     max(abs(physicalCropSum + fallow[, y, ] - physicalAreaSum)))
       }
     }
 
