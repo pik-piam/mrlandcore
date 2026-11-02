@@ -7,18 +7,20 @@
 readDinerstein2017(subtype = "grassland")
 }
 \arguments{
-\item{subtype}{Biome group whose areal cover fraction is returned. Currently only
+\item{subtype}{Biome group whose land area share is returned. Currently only
 \code{"grassland"} = RESOLVE biomes 7 (tropical and subtropical grasslands, savannas and
 shrublands), 8 (temperate grasslands, savannas and shrublands), 9 (flooded grasslands and
 savannas) and 10 (montane grasslands and shrublands).}
 }
 \value{
-magpie object (67420 cells) with the cover fraction of the selected biome group.
-Cells outside any ecoregion of that group are NA and set to zero in \code{\link{correctDinerstein2017}}.
+magpie object (67420 cells) with the land area share of the selected biome group.
+Cells outside any ecoregion of that group (NA, or NaN without any ecoregion) are set to zero in
+\code{\link{correctDinerstein2017}}.
 }
 \description{
 Reads the RESOLVE Terrestrial Ecoregions 2017 (Dinerstein et al. 2017)
-and returns the areal cover fraction of a biome group per 0.5 degree cell.
+and returns the share of a biome group in the land area (area of all ecoregions) of each
+0.5 degree grid cell.
 }
 \examples{
 \dontrun{
