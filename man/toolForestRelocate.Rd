@@ -4,7 +4,7 @@
 \alias{toolForestRelocate}
 \title{toolForestRelocate}
 \usage{
-toolForestRelocate(lu, luCountry, natTarget, vegC)
+toolForestRelocate(lu, luCountry, natTarget, vegC, potForestShr = TRUE)
 }
 \arguments{
 \item{lu}{uncorrected landuse initialisation data set (cell level)}
@@ -14,6 +14,12 @@ toolForestRelocate(lu, luCountry, natTarget, vegC)
 \item{natTarget}{target natural land allocation on country level}
 
 \item{vegC}{vegetation carbon data used as reallocation weight}
+
+\item{potForestShr}{If TRUE (default), other land converted to forest is taken first from the
+biophysical forest potential headroom of a cell (potential forest area from
+\code{calcPotentialForestArea(share = TRUE)} minus existing forest). Only if this headroom
+is insufficient to match the country target, the remainder is converted outside the
+potential. Existing forest is not affected. If FALSE, the forest potential is ignored.}
 }
 \value{
 List of magpie object with results on cellular level
