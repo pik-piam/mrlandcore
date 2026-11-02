@@ -27,6 +27,29 @@
   return(list(lu = lu, luCountry = luCountry, natTarget = natTarget, vegC = vegC, pot = pot))
 }
 
+# toy country FRA (4 cells): FAO forest below LUH forest, so part of the removed forest becomes other land
+.toyDataIncrease <- function() {
+  cells <- c("2p25.47p25.FRA", "2p75.47p25.FRA", "3p25.47p25.FRA", "3p75.47p25.FRA")
+  cats  <- c("crop", "past", "range", "primforest", "secdforest", "forestry", "urban", "other")
+  lu <- magclass::new.magpie(cells, "y1995", cats, fill = 0, sets = c("x.y.iso", "t", "data"))
+  lu[1, , ] <- c(1.0, 0.5, 0, 0.3, 0.8, 0.1, 0.1, 0.4)
+  lu[2, , ] <- c(0.5, 0.5, 0, 0.0, 1.2, 0.2, 0.1, 0.2)
+  lu[3, , ] <- c(0.5, 0.2, 0, 0.2, 0.6, 0.0, 0.1, 0.5)
+  lu[4, , ] <- c(0.8, 0.3, 0, 0.0, 0.9, 0.1, 0.1, 0.3)
+  vegC <- magclass::new.magpie(cells, "y1995", "vegc", sets = c("x.y.iso", "t", "data"))
+  vegC[, , ] <- c(60, 10, 35, 20)
+  .twoYears <- function(x) magclass::mbind(x, magclass::setYears(x, "y2000"))
+  lu <- .twoYears(lu)
+  vegC <- .twoYears(vegC)
+  luCountry <- madrat::toolCountryFill(magclass::dimSums(lu, dim = c("x", "y")), fill = 0, verbosity = 2)
+  natTarget <- luCountry[, , c("primforest", "secdforest", "forestry", "other")]
+  # secdforest -0.8 / -1.5 Mha, of which primforest +0.3 / +0.5 and other land +0.5 / +1.0 (y1995 / y2000)
+  natTarget["FRA", , "secdforest"] <- natTarget["FRA", , "secdforest"] - c(0.8, 1.5)
+  natTarget["FRA", , "primforest"] <- natTarget["FRA", , "primforest"] + c(0.3, 0.5)
+  natTarget["FRA", , "other"]      <- natTarget["FRA", , "other"] + c(0.5, 1.0)
+  return(list(lu = lu, luCountry = luCountry, natTarget = natTarget, vegC = vegC))
+}
+
 forests <- c("primforest", "secdforest", "forestry")
 
 test_that("potForestShr = FALSE reproduces the relocation without forest potential", {
@@ -35,6 +58,14 @@ test_that("potForestShr = FALSE reproduces the relocation without forest potenti
                                              potForestShr = FALSE))
   # reference created with toolForestRelocate before the forest potential was introduced
   expect_equal(out, readRDS(test_path("toolForestRelocate_ref.rds")), tolerance = 1e-10)
+})
+
+test_that("other land increase is placed as before", {
+  d <- .toyDataIncrease()
+  out <- suppressMessages(toolForestRelocate(d[["lu"]], d[["luCountry"]], d[["natTarget"]], d[["vegC"]],
+                                             potForestShr = FALSE))
+  # reference created with toolForestRelocate before the allocation of other land used .removeArea
+  expect_equal(out, readRDS(test_path("toolForestRelocate_refIncrease.rds")), tolerance = 1e-6)
 })
 
 test_that("new forest is placed within the forest potential first", {

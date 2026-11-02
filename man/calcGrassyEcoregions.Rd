@@ -10,7 +10,7 @@ calcGrassyEcoregions()
 magpie object in cellular resolution (67420 lpjcells)
 }
 \description{
-Per-cell areal cover fraction of the RESOLVE Ecoregions 2017 grassy biomes
+Grid cell areal cover fraction of the RESOLVE Ecoregions 2017 grassy biomes
 (Dinerstein et al. 2017): tropical and subtropical, temperate, flooded, and montane
 grasslands, savannas and shrublands (biomes 7-10). Used to correct the LPJmL-derived
 potential forest area, which overestimates forest cover in these open ecosystems,

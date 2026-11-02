@@ -42,10 +42,11 @@ calcLanduseInitialisation and is used there (via \code{\link{toolForestRelocate}
 Only use it with aggregate = FALSE.}
 }
 \value{
-magpie object in cellular resolution
+magpie object on grid cell or country level: potential forest area (Mha) or,
+        with share = TRUE, potential forest share of the grid cell land area
 }
 \description{
-Calculates the area than can be potentially covered by forests,
+Calculates the area that can potentially be covered by forests,
              based on environmental conditions.
 }
 \examples{

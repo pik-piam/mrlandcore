@@ -1,6 +1,6 @@
 #' @title calcPotentialForestArea
 #'
-#' @description Calculates the area than can be potentially covered by forests,
+#' @description Calculates the area that can potentially be covered by forests,
 #'              based on environmental conditions.
 #'
 #' @param refData  Determines the reference data that the estimated potential
@@ -23,7 +23,8 @@
 #'              calcLanduseInitialisation and is used there (via \code{\link{toolForestRelocate}}).
 #'              Only use it with aggregate = FALSE.
 #'
-#' @return magpie object in cellular resolution
+#' @return magpie object on grid cell or country level: potential forest area (Mha) or,
+#'         with share = TRUE, potential forest share of the grid cell land area
 #' @author Patrick v. Jeetze, Florian Humpenoeder
 #'
 #' @examples
