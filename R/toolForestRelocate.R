@@ -7,10 +7,10 @@
 #' @param natTarget target natural land allocation on country level
 #' @param vegC      vegetation carbon data used as reallocation weight
 #' @param potForestShr If TRUE (default), other land converted to forest is taken first from the
-#'                  biophysical forest potential headroom of a cell (potential forest area from
-#'                  \code{calcPotentialForestArea(share = TRUE)} minus existing forest). Only if this headroom
-#'                  is insufficient to match the country target, the remainder is converted outside the
-#'                  potential. Existing forest is not affected. If FALSE, the forest potential is ignored.
+#'                  unforested potential forest area of each cell (potential forest area from
+#'                  \code{calcPotentialForestArea(share = TRUE)} minus existing forest). Only if this area
+#'                  is too small to match the country target, the remaining area is converted outside the
+#'                  potential. Existing forest is not changed. If FALSE, the forest potential is ignored.
 #' @return List of magpie object with results on cellular level
 #'
 #' @author Kristine Karstens, Jan Philipp Dietrich, Felicitas Beier, Patrick v. Jeetze
@@ -154,26 +154,27 @@ toolForestRelocate <- function(lu, luCountry, natTarget, vegC, potForestShr = TR
         }
 
         if (landType == "other" && !is.null(potShr)) {
-          # other land removed here becomes forest: take it first from the part of other land that
-          # lies within the forest potential headroom (potential forest area minus existing forest)
-          # and only the remainder from other land outside the potential
-          headroom <- setNames(potShr[iso, , ] * luCellArea[iso, , ]
-                               - dimSums(lu[iso, , forests], dim = 3), NULL)
-          headroom[headroom < 0] <- 0
+          # other land removed here becomes forest: take it first from other land within the
+          # unforested potential forest area (potential forest area minus existing forest)
+          # and only the remaining area from other land outside the potential
+          potUnforested <- setNames(potShr[iso, , ] * luCellArea[iso, , ]
+                                    - dimSums(lu[iso, , forests], dim = 3), NULL)
+          potUnforested[potUnforested < 0] <- 0
           catArea <- setNames(relocated[[iso]][, , landType], NULL)
-          excess  <- catArea - headroom
-          excess[excess < 0] <- 0
-          inPot    <- catArea - excess
+          outPot  <- catArea - potUnforested
+          outPot[outPot < 0] <- 0
+          inPot    <- catArea - outPot
           reduceIn <- pmax(catReduce, -.arrayReduce(dimSums(inPot, dim = 1)))
           reduceOut <- catReduce - reduceIn
-          shortfall <- round(-reduceOut, 4)
-          if (any(shortfall > 0)) {
+          convertedOutside <- round(-reduceOut, 4)
+          if (any(convertedOutside > 0)) {
             vcat(2, "Forest potential too small in ", iso, ": ",
-                 paste(names(shortfall)[shortfall > 0], shortfall[shortfall > 0], "Mha", collapse = ", "),
+                 paste(names(convertedOutside)[convertedOutside > 0], convertedOutside[convertedOutside > 0], "Mha",
+                       collapse = ", "),
                  " of other land converted to forest outside the potential")
           }
           removed <- (.removeArea(inPot, reduceIn, cellWeight, landType)
-                      + .removeArea(excess, reduceOut, cellWeight, landType))
+                      + .removeArea(outPot, reduceOut, cellWeight, landType))
         } else {
           removed <- .removeArea(relocated[[iso]][, , landType], catReduce, cellWeight, landType)
         }

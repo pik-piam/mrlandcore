@@ -16,10 +16,10 @@ toolForestRelocate(lu, luCountry, natTarget, vegC, potForestShr = TRUE)
 \item{vegC}{vegetation carbon data used as reallocation weight}
 
 \item{potForestShr}{If TRUE (default), other land converted to forest is taken first from the
-biophysical forest potential headroom of a cell (potential forest area from
-\code{calcPotentialForestArea(share = TRUE)} minus existing forest). Only if this headroom
-is insufficient to match the country target, the remainder is converted outside the
-potential. Existing forest is not affected. If FALSE, the forest potential is ignored.}
+unforested potential forest area of each cell (potential forest area from
+\code{calcPotentialForestArea(share = TRUE)} minus existing forest). Only if this area
+is too small to match the country target, the remaining area is converted outside the
+potential. Existing forest is not changed. If FALSE, the forest potential is ignored.}
 }
 \value{
 List of magpie object with results on cellular level

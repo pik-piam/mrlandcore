@@ -33,9 +33,9 @@ Only relevant, if refData = "lpj".}
 cover fraction (RESOLVE 2017 biomes 7-10, calcGrassyEcoregions), correcting the
 LPJmL overestimation of forest in open grassy ecosystems.}
 
-\item{share}{If FALSE (default), the potential forest area (Mha) is returned. It is raised to at
+\item{share}{If FALSE (default), the potential forest area (Mha) is returned. It is set to at
 least the forest area of the land use initialisation (maximum over all initialisation
-years) in each cell, so that existing forest always lies within the potential.
+years) in each cell, so that it includes all existing forest.
 If TRUE, the biophysical potential forest share of the cell land area (0-1) is returned,
 without this adjustment and on lpjcell level only. This variant does not depend on
 calcLanduseInitialisation and is used there (via \code{\link{toolForestRelocate}}).

@@ -15,9 +15,9 @@
 #' @param grassyCorrection If TRUE, the potential forest area is reduced by the grassland-ecoregion
 #'                    cover fraction (RESOLVE 2017 biomes 7-10, calcGrassyEcoregions), correcting the
 #'                    LPJmL overestimation of forest in open grassy ecosystems.
-#' @param share If FALSE (default), the potential forest area (Mha) is returned. It is raised to at
+#' @param share If FALSE (default), the potential forest area (Mha) is returned. It is set to at
 #'              least the forest area of the land use initialisation (maximum over all initialisation
-#'              years) in each cell, so that existing forest always lies within the potential.
+#'              years) in each cell, so that it includes all existing forest.
 #'              If TRUE, the biophysical potential forest share of the cell land area (0-1) is returned,
 #'              without this adjustment and on lpjcell level only. This variant does not depend on
 #'              calcLanduseInitialisation and is used there (via \code{\link{toolForestRelocate}}).
@@ -78,13 +78,13 @@ calcPotentialForestArea <- function(refData = "lpj", countryLevel = FALSE, cells
 
   potForestArea <- potForest * setYears(landArea, NULL)
 
-  # existing forest of the land use initialisation always lies within the potential
+  # the potential forest area includes all forest of the land use initialisation
   forestIni <- dimSums(landIni[, , c("primforest", "secdforest", "forestry")], dim = 3)
   forestMax <- setYears(forestIni[, 1, ], NULL)
   forestMax[] <- apply(as.array(forestIni), c(1, 3), max)
-  excess <- forestMax - potForestArea
-  excess[excess < 0] <- 0
-  potForestArea <- potForestArea + excess
+  forestOutPot <- forestMax - potForestArea
+  forestOutPot[forestOutPot < 0] <- 0
+  potForestArea <- potForestArea + forestOutPot
 
   if (countryLevel) {
     out <- toolCountryFill(dimSums(potForestArea, dim = c("x", "y")), fill = 0)
