@@ -1,7 +1,7 @@
 # calcLUH2MAgPIE
 
-Calculates the real aggregation of LUH croptypes to MAgPIE croptypes out
-of LUH2FAO and FAO2MAgPIE mappings
+Calculates the relation matrix for LUH croptype and MAgPIE croptype
+areas out of LUH2FAO and FAO2MAgPIE mappings
 
 ## Usage
 

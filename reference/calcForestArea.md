@@ -7,14 +7,8 @@ LanduseInitialisation data.
 ## Usage
 
 ``` r
-calcForestArea(selectyears = "past_til2020")
+calcForestArea()
 ```
-
-## Arguments
-
-- selectyears:
-
-  passed to magpiesets::findset
 
 ## Value
 

@@ -12,7 +12,6 @@ calcCropareaLandInG(
   sectoral = "kcr",
   physical = TRUE,
   cellular = FALSE,
-  cells = "magpiecell",
   irrigation = FALSE,
   selectyears = "all",
   lpjml = c(natveg = "LPJmL4_for_MAgPIE_44ac93de", crop =
@@ -36,10 +35,6 @@ calcCropareaLandInG(
 
   if TRUE: calculates cellular crop area for all magpie croptypes.
   Option FALSE is not (yet) available.
-
-- cells:
-
-  Switch between "magpiecell" (59199) and "lpjcell" (67420)
 
 - irrigation:
 

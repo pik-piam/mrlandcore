@@ -62,4 +62,4 @@ on cellular level, unit and description.
 ## Author
 
 Jan Philipp Dietrich, Benjamin Leon Bodirsky, Kristine Karstens,
-Felcitas Beier, Patrick v. Jeetze
+Felicitas Beier, Patrick v. Jeetze

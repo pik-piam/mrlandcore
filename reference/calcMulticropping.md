@@ -1,28 +1,20 @@
 # calcMulticropping
 
-calculates a multiple cropping factor based on area harvested, physical
-cropland area (and optionally fallow land).
+Multicropping factor, telling how many harvests are produced on one unit
+of physical area. Fallow lands are not counted in, so the factor is
+always larger than 1.
 
 ## Usage
 
 ``` r
-calcMulticropping(extend_future = FALSE, factortype = "CI")
+calcMulticropping(irrigation = TRUE)
 ```
 
 ## Arguments
 
-- extend_future:
+- irrigation:
 
-  if TRUE
-
-- factortype:
-
-  CI: cropping intensity factor calculated as ratio of harvested to
-  physical area where values above one indicate multicropping, below one
-  fallow land (default) MC: multiple cropping factor indicating areas
-  that are harvested more than once in one year calculated taking fallow
-  land into account explicitly: harvestedArea / (physicalArea -
-  fallowLand)
+  report irrigated and non-irrigated areas separately
 
 ## Value
 
@@ -31,11 +23,11 @@ level, unit and description.
 
 ## See also
 
-\[calcFAOLand()\], \[calcCroparea()\]
+\[calcCroparea()\]
 
 ## Author
 
-Benjamin Leon Bodirsky, David Chen, Felicitas Beier
+Benjamin Leon Bodirsky, Felicitas Beier
 
 ## Examples
 

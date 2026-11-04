@@ -3,9 +3,11 @@
 ## All functions
 
 - [`calcCroparea()`](calcCroparea.md) : calcCroparea
+- [`calcCropareaFAOLUH()`](calcCropareaFAOLUH.md) : calcCropareaFAOLUH
 - [`calcCropareaLandInG()`](calcCropareaLandInG.md) :
   calcCropareaLandInG
-- [`calcFallowLand()`](calcFallowLand.md) : calcFallowLand
+- [`calcFallow()`](calcFallow.md) : calcFallow
+- [`calcFallowLandInG()`](calcFallowLandInG.md) : calcFallowLandInG
 - [`calcForestArea()`](calcForestArea.md) : calcForestArea
 - [`calcGrassGPP()`](calcGrassGPP.md) : calcGrassGPP
 - [`calcGrowingPeriodMonths()`](calcGrowingPeriodMonths.md) :
@@ -23,6 +25,8 @@
 - [`calcLanduseInitialisationBase()`](calcLanduseInitialisationBase.md)
   : calcLanduseInitialisationBase
 - [`calcMulticropping()`](calcMulticropping.md) : calcMulticropping
+- [`calcMulticroppingOld()`](calcMulticroppingOld.md) :
+  calcMulticroppingOld
 - [`calcMulticroppingSuitability()`](calcMulticroppingSuitability.md) :
   calcMulticroppingSuitability
 - [`calcMultipleCroppingZones()`](calcMultipleCroppingZones.md) :
