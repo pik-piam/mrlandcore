@@ -1,5 +1,5 @@
 #' @title calcLUH2MAgPIE
-#' @description Calculates the real aggregation of LUH croptypes to MAgPIE croptypes
+#' @description Calculates the relation matrix for LUH croptype and MAgPIE croptype areas
 #'              out of LUH2FAO and FAO2MAgPIE mappings
 #'
 #' @param share       total (for total numbers), LUHofMAG (for share of LUH within kcr types),
@@ -20,7 +20,6 @@
 
 calcLUH2MAgPIE <- function(share = "total", bioenergy = "ignore",
                            rice = "non_flooded", missing = "ignore") {
-
   # proxy filling map in the case of `missing = "fill"`
   proxyMapping <- c(
     # Polar or Sub-polar with Iceland/Norway
@@ -49,8 +48,8 @@ calcLUH2MAgPIE <- function(share = "total", bioenergy = "ignore",
       warning("No missing data for total numbers assumed.")
     }
 
-    FAOdata     <- calcOutput("Croparea", sectoral = "ProductionItem", # nolint : object_name_linter.
-                              physical = FALSE, aggregate = FALSE)
+    FAOdata <- calcOutput("CropareaFAOLUH", sectoral = "ProductionItem", # nolint : object_name_linter
+                          physical = FALSE, aggregate = FALSE)
 
     if (rice == "non_flooded") {
       # Rice areas are pre-determined by areas reported as flooded in LUH.

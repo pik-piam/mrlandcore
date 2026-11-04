@@ -7,17 +7,19 @@
 calcCroparea(
   sectoral = "kcr",
   physical = TRUE,
+  fallow = FALSE,
   cellular = FALSE,
-  irrigation = FALSE
+  irrigation = FALSE,
+  datasource = "LandInG"
 )
 }
 \arguments{
-\item{sectoral}{"area_harvested" returns croparea aggregated to FAO products,
-"ProductionItem" unaggregated ProdSTAT items,
-"FoodBalanceItem" Food Balance Sheet categories,
-"kcr" MAgPIE items, and "lpj" LPJmL items}
+\item{sectoral}{"kcr" MAgPIE items, and "lpj" LPJmL items}
 
-\item{physical}{if TRUE the sum over all crops agrees with the cropland area per country}
+\item{physical}{if TRUE it returns the physical area, with cropareas of multicropping systems being
+scaled to match physical areas, if FALSE the area harvested is returned}
+
+\item{fallow}{if TRUE fallow land is returned as element in crop set}
 
 \item{cellular}{if TRUE: calculates cellular MAgPIE crop area for all magpie croptypes.
 Crop area from LUH3 crop types (c3ann, c4ann, c3per, c4per, cnfx)
@@ -27,17 +29,17 @@ specific LUH crop type to divide into MAgPIE crop types.}
 
 \item{irrigation}{If true: cellular areas are returned separated
 into irrigated and rainfed (see setup in calcLUH3)}
+
+\item{datasource}{Croparea data source (LandInG or FAOLUH).
+Datasource FAOLUH is deprecated and is only kept for
+backwards compatibility.}
 }
 \value{
 areas of individual crops from FAOSTAT and weight
 }
 \description{
-Returns harvested areas of individual crops from FAOSTAT.
-             Total harvested areas can be lower or higher than arable
-             land because of multicropping or fallow land.
-             Rice areas are distributed to flooded LUH areas. Additional FAOSTAT
-             rice areas are distributed based on country shares.
+returns croparea
 }
 \author{
-Ulrich Kreidenweis, Kristine Karstens, Felicitas Beier
+Felicitas Beier, Benjamin Leon Bodirsky
 }

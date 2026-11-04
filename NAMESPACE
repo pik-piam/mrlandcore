@@ -13,66 +13,88 @@ import(mrfaocore)
 import(mstools)
 importFrom(SPEI,thornthwaite)
 importFrom(dplyr,"%>%")
-importFrom(lpjclass,read.LPJ_input)
-importFrom(lpjclass,readLPJ)
+importFrom(lpjclass,
+  read.LPJ_input,
+  readLPJ
+)
 importFrom(lpjmlkit,read_io)
 importFrom(luscale,groupAggregate)
-importFrom(madrat,calcOutput)
-importFrom(madrat,readSource)
-importFrom(madrat,toolAggregate)
-importFrom(madrat,toolConditionalReplace)
-importFrom(madrat,toolCountryFill)
-importFrom(madrat,toolGetMapping)
-importFrom(madrat,toolSplitSubtype)
-importFrom(madrat,toolSubtypeSelect)
-importFrom(madrat,toolTimeAverage)
-importFrom(magclass,add_dimension)
-importFrom(magclass,as.magpie)
-importFrom(magclass,clean_magpie)
-importFrom(magclass,collapseDim)
-importFrom(magclass,collapseNames)
-importFrom(magclass,dimSums)
-importFrom(magclass,getCells)
-importFrom(magclass,getItems)
-importFrom(magclass,getNames)
-importFrom(magclass,getSets)
-importFrom(magclass,getYears)
-importFrom(magclass,mbind)
-importFrom(magclass,ncells)
-importFrom(magclass,new.magpie)
-importFrom(magclass,setItems)
-importFrom(magclass,setNames)
-importFrom(magclass,setYears)
-importFrom(magpiesets,addLocation)
-importFrom(magpiesets,findset)
-importFrom(mrfaocore,toolExtrapolateFodder)
-importFrom(mrfaocore,toolFAOcombine)
-importFrom(mstools,toolConv2CountryByCelltype)
-importFrom(mstools,toolHoldConstant)
+importFrom(madrat,
+  calcOutput,
+  readSource,
+  toolAggregate,
+  toolConditionalReplace,
+  toolCountryFill,
+  toolGetMapping,
+  toolSplitSubtype,
+  toolSubtypeSelect,
+  toolTimeAverage
+)
+importFrom(magclass,
+  add_dimension,
+  as.magpie,
+  clean_magpie,
+  collapseDim,
+  collapseNames,
+  dimSums,
+  getCells,
+  getItems,
+  getNames,
+  getSets,
+  getYears,
+  mbind,
+  ncells,
+  new.magpie,
+  setItems,
+  setNames,
+  setYears
+)
+importFrom(magpiesets,
+  addLocation,
+  findset
+)
+importFrom(mrfaocore,
+  toolExtrapolateFodder,
+  toolFAOcombine
+)
+importFrom(mstools,
+  toolConv2CountryByCelltype,
+  toolHoldConstant
+)
 importFrom(ncdf4,nc_open)
 importFrom(nleqslv,nleqslv)
-importFrom(raster,brick)
-importFrom(raster,projectRaster)
-importFrom(raster,raster)
-importFrom(stringr,str_count)
-importFrom(stringr,str_detect)
-importFrom(stringr,str_match)
-importFrom(stringr,str_split)
-importFrom(stringr,str_subset)
-importFrom(stringr,str_trim)
-importFrom(terra,"ext<-")
-importFrom(terra,aggregate)
-importFrom(terra,ext)
-importFrom(terra,project)
-importFrom(terra,rast)
-importFrom(terra,subset)
-importFrom(terra,terraOptions)
-importFrom(utils,download.file)
-importFrom(utils,head)
-importFrom(utils,person)
-importFrom(utils,read.csv)
-importFrom(utils,read.delim)
-importFrom(utils,tail)
-importFrom(withr,defer)
-importFrom(withr,local_options)
-importFrom(withr,local_tempdir)
+importFrom(raster,
+  brick,
+  projectRaster,
+  raster
+)
+importFrom(stringr,
+  str_count,
+  str_detect,
+  str_match,
+  str_split,
+  str_subset,
+  str_trim
+)
+importFrom(terra,
+  "ext<-",
+  aggregate,
+  ext,
+  project,
+  rast,
+  subset,
+  terraOptions
+)
+importFrom(utils,
+  download.file,
+  head,
+  person,
+  read.csv,
+  read.delim,
+  tail
+)
+importFrom(withr,
+  defer,
+  local_options,
+  local_tempdir
+)

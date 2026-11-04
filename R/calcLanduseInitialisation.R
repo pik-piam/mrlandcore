@@ -20,7 +20,7 @@
 #' @param selectyears  default on "past"
 #' @return List of magpie object with results on country or cellular level, weight on cellular level,
 #' unit and description.
-#' @author Jan Philipp Dietrich, Benjamin Leon Bodirsky, Kristine Karstens, Felcitas Beier, Patrick v. Jeetze
+#' @author Jan Philipp Dietrich, Benjamin Leon Bodirsky, Kristine Karstens, Felicitas Beier, Patrick v. Jeetze
 calcLanduseInitialisation <- function(cellular = FALSE, nclasses = "seven",
                                       cells = "lpjcell", selectyears = "past_til2020",
                                       input_magpie = FALSE) { # nolint

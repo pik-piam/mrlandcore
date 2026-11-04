@@ -1,9 +1,9 @@
-#' calcForestArea
+#' @title calcForestArea
 #'
-#' Calculates consistent forest area and its subcategories based on FAO_FRA2015
-#' (and FAO_FRA2020 only for forest plantations) and LanduseInitialisation data.
+#' @description Calculates consistent forest area and its subcategories based on
+#'              FAO_FRA2015 (and FAO_FRA2020 only for forest plantations)
+#'              and LanduseInitialisation data.
 #'
-#' @param selectyears passed to magpiesets::findset
 #' @return List of magpie object with results on country level, weight, unit and description.
 #'
 #' @author Kristine Karstens, Jan Philipp Dietrich
@@ -12,11 +12,17 @@
 #' calcOutput("ForestArea")
 #' }
 #' @export
-calcForestArea <- function(selectyears = "past_til2020") {
+calcForestArea <- function() {
 
-  years <- sort(magpiesets::findset(selectyears, noset = "original"))
+  # set yearly time steps for historical time frame for forest area calculation
+  histyears <- sort(magpiesets::findset("past_til2020"))
+  startyear <- 1960
+  endyear   <- as.integer(gsub("y", "", tail(histyears, 1)))
+  years     <- paste0("y", seq(from = startyear, to = endyear, by = 1))
 
-  forest <- readSource("FAO_FRA2015", "fac")[, , c("Forest", "NatFor", "PrimFor", "NatRegFor", "PlantFor")]
+  forest <- readSource("FAO_FRA2015", "fac")[, , c("Forest", "NatFor",
+                                                   "PrimFor", "NatRegFor",
+                                                   "PlantFor")]
 
   # Plantation data is bit strange in FRA2015, we update this with FRA2020 data (but only till 2015)
   # We do this because FRA2020 has stopped reporting separately on primf and secdf
@@ -25,7 +31,7 @@ calcForestArea <- function(selectyears = "past_til2020") {
   ## Overall FRA 2020 data
   fra2020      <- readSource("FRA2020", "forest_area")
 
-  ## Find which year is missing in FRA2020 data (which exisits in FRA2015)
+  ## Find which year is missing in FRA2020 data (which exists in FRA2015)
   missingYears <- setdiff(getYears(forest), getYears(fra2020))
 
   ## Linear interpolation to missing year
@@ -41,12 +47,12 @@ calcForestArea <- function(selectyears = "past_til2020") {
   # (sum of nat.reg.forest and planted forest)
   forest[, , "Forest"]   <- forest[, , "NatFor"] + forest[, , "PlantFor"]
 
-  forest <- time_interpolate(forest, interpolated_year = years, integrate_interpolated_years = TRUE,
+  forest <- time_interpolate(forest, interpolated_year = years,
+                             integrate_interpolated_years = TRUE,
                              extrapolation_type = "constant")[, years, ]
   vcat(verbosity = 3, "Forest is interpolated for missing years and held constant for the period before FAO starts")
 
   ### fix know issues
-
   forest["HND", , "PlantFor"]   <- forest["HND", , "Forest"] - forest["HND", , "NatFor"]
   forest["IDN", , "Forest"]     <- forest["IDN", , "NatFor"] + forest["IDN", , "PlantFor"]
   forest["FIN", , "NatRegFor"]  <- forest["FIN", , "NatFor"] - forest["FIN", , "PrimFor"]
@@ -120,7 +126,8 @@ calcForestArea <- function(selectyears = "past_til2020") {
     warning("There are inconsistencies within the forest area data set.")
   }
 
-  out <- mrdownscale::toolReplaceExpansion(out, "primforest", "secdforest", warnThreshold = 35)
+  out <- mrdownscale::toolReplaceExpansion(out, "primforest", "secdforest",
+                                           warnThreshold = 35)
 
   return(list(x = out,
               weight = NULL,

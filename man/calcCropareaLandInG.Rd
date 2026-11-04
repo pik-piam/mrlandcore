@@ -8,7 +8,6 @@ calcCropareaLandInG(
   sectoral = "kcr",
   physical = TRUE,
   cellular = FALSE,
-  cells = "magpiecell",
   irrigation = FALSE,
   selectyears = "all",
   lpjml = c(natveg = "LPJmL4_for_MAgPIE_44ac93de", crop =
@@ -24,8 +23,6 @@ agrees with the physical cropland of readLandInG(subtype = physical)}
 
 \item{cellular}{if TRUE: calculates cellular crop area for all magpie croptypes.
 Option FALSE is not (yet) available.}
-
-\item{cells}{Switch between "magpiecell" (59199) and "lpjcell" (67420)}
 
 \item{irrigation}{If true: cellular areas are returned separated
 into irrigated and rainfed}
