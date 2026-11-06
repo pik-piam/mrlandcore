@@ -13,7 +13,6 @@
 #' @param irrigation  If true: cellular areas are returned separated
 #'                    into irrigated and rainfed
 #' @param selectyears extract certain years from the data
-#' @param lpjml       LPJmL version used to determine multiple cropping suitability
 #' @param climatetype Climate scenario or historical baseline "GSWP3-W5E5:historical"
 #'                    used to determine multiple cropping suitability
 #'
@@ -22,28 +21,28 @@
 #' @author David Hoetten, Felicitas Beier
 #'
 #' @importFrom madrat readSource toolConditionalReplace toolCountryFill toolAggregate
-#' @importFrom magclass dimSums getItems
-#' @importFrom mstools toolHoldConstant
-#'
+#' @importFrom magclass dimSums getItems dimOrder
+#' @importFrom mstools toolHoldConstant toolExpectTrue
+
 calcCropareaLandInG <- function(sectoral = "kcr", physical = TRUE, cellular = FALSE,
                                 irrigation = FALSE, selectyears = "all",
-                                lpjml = c(natveg = "LPJmL4_for_MAgPIE_44ac93de",
-                                          crop = "ggcmi_phase3_nchecks_bft_e511ac58"),
-                                climatetype = "GSWP3-W5E5:historical") {
+                                climatetype = "MRI-ESM2-0:ssp370") {
 
-  if (climatetype != "GSWP3-W5E5:historical" ||
-        lpjml[["crop"]] != "ggcmi_phase3_nchecks_bft_e511ac58") {
-    warning("Error in calcCropareaLandInG: The LPJmL version has been updated
-            since LandInG was run for the last time.
-            Please consider updating the LandInG data.")
-    # Kristine: How to include a mapping here?
-  }
+  # extract current default lpjml version
+  cfg   <- toolLPJmLDefault(suppressNote = TRUE)
+  lpjml <- cfg$defaultLPJmLVersion
+
+  toolExpectTrue(lpjml == "ggcmi_phase3_nchecks_bft_e511ac58",
+                 paste0("In calcCropareaLandInG: ",
+                        "LPJmL version is in line with the version used ",
+                        "in last LandInG run."),
+                 falseStatus = "note")
 
   withr::local_options(magclass_sizeLimit = 1e+12)
 
   ### Read in data ###
   # total physical area from LandInG (in Mha)
-  physicalArea <- readSource("LandInG", subtype = "physicalArea")
+  physicalArea  <- readSource("LandInG", subtype = "physicalArea")
   # crop-specific harvested area (in Mha)
   harvestedArea <- readSource("LandInG", subtype = "harvestedArea")
 
@@ -72,7 +71,7 @@ calcCropareaLandInG <- function(sectoral = "kcr", physical = TRUE, cellular = FA
 
   # croplists
   crops      <- getItems(harvestedArea, dim = "crop")
-  perennials <- c("sugr_cane", "oilpalm")
+  perennials <- c("sugr_cane", "oilpalm", "betr", "begr")
   annuals    <- crops[!crops %in% perennials]
 
   # Reduce to selected number of years
@@ -152,7 +151,7 @@ calcCropareaLandInG <- function(sectoral = "kcr", physical = TRUE, cellular = FA
     ###########################################
     # In the LandInG calculations, some rainfed harvested area is allocated to irrigated land.
     # This leads to cases where areas are declared as "rainfed harvested area" resulting in
-    # cropping intensities > 1 for rainfed crops where not multiple cropping is possible
+    # cropping intensities > 1 for rainfed crops where multiple cropping is not possible
     # according to the multiple cropping suitability.
     # These areas are declared irrigated in the following correction.
 
@@ -225,9 +224,21 @@ calcCropareaLandInG <- function(sectoral = "kcr", physical = TRUE, cellular = FA
     violation <- fctMCwhereNonSuit(physicalAreaYearly = physicalAreaYearly,
                                    harvestedAreaYearly = harvestedAreaYearly,
                                    mcSuit = mcSuit)
+    # Check whether there are cases where multiple cropping happens despite not being suitable
+    # for multiple cropping even after correction
+    toolExpectTrue(!any(violation), "All cases where multiple cropping happens according to calcCropareaLandInG are
+                                     suitable for multiple cropping according to calcMulticroppingSuitability",
+                   falseStatus = "note")
+    # Note: If this note occurs please consider updating the LandInG data using a more recent LPJmL version!
+
+    # Correct remaining mismatches
     if (any(violation)) {
-      stop("Not all cases where multiple cropping happens
-      despite not being suitable for multiple cropping have been corrected.")
+      lostArea <- sum(harvestedAreaYearly[violation] - physicalAreaYearly[violation])
+      vcat(1, paste0(round(lostArea / sum(physicalAreaYearly) * 100, digits = 3), "% (",
+                     format(round(lostArea * 1e6), scientific = FALSE),
+                     " ha) of harvested area is lost due to multiple cropping correction"))
+      harvestedAreaYearly[violation] <- physicalAreaYearly[violation]
+      vcat(1, paste0("This correction should only be necessary when LandInG is out-of-date"))
     }
 
     ###################
@@ -243,12 +254,12 @@ calcCropareaLandInG <- function(sectoral = "kcr", physical = TRUE, cellular = FA
       # this is already the format of cropArea
     } else if (sectoral == "lpj") {
       # crop mapping
-      mapMagToLpj <- toolGetMapping(type = "sectoral", name = "MAgPIE_LPJmL.csv",
-                                    where = "mappingfolder")
+      mapMagToLpj <- toolGetMapping(name = "MAgPIE_LPJmL.csv", type = "sectoral",
+                                    where = "mrlandcore")
       mapMagToLpj <- mapMagToLpj[!(mapMagToLpj$MAgPIE %in% nonCrops), ]
 
       cropArea <- toolAggregate(cropArea, rel = mapMagToLpj,
-                                from = "MAgPIE", to = "LPJmL", dim = "crop")
+                                from = "MAgPIE", to = "LPJmL5", dim = "crop")
     } else {
       stop("This sectoral aggregation is not available in calcCropareaLandInG")
     }

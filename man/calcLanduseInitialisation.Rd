@@ -42,6 +42,11 @@ unit and description.
 Calculates the cellular MAgPIE landuse initialisation area.
              Most of the calculation happens in calcLanduseInitialisationBase.
 }
+\examples{
+\dontrun{
+calcOutput("LanduseInitialisation")
+}
+}
 \author{
 Jan Philipp Dietrich, Benjamin Leon Bodirsky, Kristine Karstens, Felicitas Beier, Patrick v. Jeetze
 }

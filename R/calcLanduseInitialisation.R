@@ -21,19 +21,23 @@
 #' @return List of magpie object with results on country or cellular level, weight on cellular level,
 #' unit and description.
 #' @author Jan Philipp Dietrich, Benjamin Leon Bodirsky, Kristine Karstens, Felicitas Beier, Patrick v. Jeetze
+#' @examples
+#' \dontrun{
+#' calcOutput("LanduseInitialisation")
+#' }
+#' @importFrom magclass setNames where
+
 calcLanduseInitialisation <- function(cellular = FALSE, nclasses = "seven",
                                       cells = "lpjcell", selectyears = "past_til2020",
                                       input_magpie = FALSE) { # nolint
 
   if (isFALSE(cellular)) {
-    out <- calcOutput("LanduseInitialisationBase", cells = "lpjcell",
-                      selectyears = selectyears, aggregate = FALSE)
+    out <- calcOutput("LanduseInitialisationBase", selectyears = selectyears, aggregate = FALSE)
     out <- toolCountryFill(dimSums(out,
                                    dim = c("x", "y")),
                            fill = 0, verbosity = 2)
   } else {
-    out <- calcOutput("LanduseInitialisationBase", cells = cells,
-                      selectyears = selectyears, aggregate = FALSE)
+    out <- calcOutput("LanduseInitialisationBase", selectyears = selectyears, aggregate = FALSE)
   }
 
   if (isTRUE(input_magpie)) {

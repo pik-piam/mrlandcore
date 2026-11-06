@@ -41,7 +41,7 @@ calcGrowingPeriodMonths <- function(selectyears, lpjml, climatetype,
   ### Read in data ###
   ####################
   # monthly grass GPP (in tDM/ha)
-  grassGPPmonth <- setYears(calcOutput("GrassGPP", season = "monthly",
+  grassGPPmonth <- setYears(calcOutput("GrassGPPmonthly",
                                        lpjml = lpjml, climatetype = climatetype,
                                        selectyears = selectyears, aggregate = FALSE),
                             selectyears)

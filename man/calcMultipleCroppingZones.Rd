@@ -17,7 +17,8 @@ calcMultipleCroppingZones(layers = 2)
 magpie object in cellular resolution
 }
 \description{
-This function returns multiple cropping zones at 0.5 degree resolution
+This function returns multiple cropping zones from GAEZ
+             at 0.5 degree resolution
 }
 \examples{
 \dontrun{

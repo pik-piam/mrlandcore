@@ -4,11 +4,9 @@
 \alias{calcLanduseInitialisationBase}
 \title{calcLanduseInitialisationBase}
 \usage{
-calcLanduseInitialisationBase(cells = "lpjcell", selectyears = "past_til2020")
+calcLanduseInitialisationBase(selectyears = "past_til2020")
 }
 \arguments{
-\item{cells}{"magpiecell" for 59199 cells or "lpjcell" for 67420 cells}
-
 \item{selectyears}{Years to be computed}
 }
 \value{
