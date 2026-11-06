@@ -41,16 +41,14 @@ calcMulticroppingIntensity <- function(scenario, selectyears,
 
   }
 
-  # areas where multicropping takes place currently (crop- and irrigation-specific)
+  # areas where multiple cropping takes place currently (crop- and irrigation-specific)
   phys <- calcOutput("Croparea", physical = TRUE, fallow = FALSE,
                      sectoral = sectoral,
                      cellular = TRUE, irrigation = TRUE,
-                     selectyears = selectyears,
                      aggregate = FALSE)[, selectyears, ]
   harv <- calcOutput("Croparea", physical = FALSE, fallow = FALSE,
                      sectoral = sectoral,
                      cellular = TRUE, irrigation = TRUE,
-                     selectyears = selectyears,
                      aggregate = FALSE)[, selectyears, ]
   # keep for dimensionality
   phys[, , ] <- NA
