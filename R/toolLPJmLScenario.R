@@ -17,10 +17,11 @@ toolLPJmLScenario <- function(lpjmlversion, climatetype, subtype) {
 
   cfg <- NULL
 
-  # add-on `+nocchist<year>`: no climate change after <year> (handled in calcLPJmLTransform)
+  # add-on `+nocchist`: no climate change after the end of the climate harmonization
+  # (refYearGcm in toolLPJmLDefault; handled in calcLPJmLTransform)
   if (grepl("+nocchist", lpjmlversion, fixed = TRUE)) {
-    cfg$nocchistYear <- as.integer(sub(".*\\+nocchist([0-9]{4}).*", "\\1", lpjmlversion))
-    lpjmlversion     <- sub("\\+nocchist[0-9]{4}", "", lpjmlversion)
+    cfg$nocchist <- TRUE
+    lpjmlversion <- sub("+nocchist", "", lpjmlversion, fixed = TRUE)
   }
 
   ##### DEFAULT CONFIG #####
@@ -33,7 +34,7 @@ toolLPJmLScenario <- function(lpjmlversion, climatetype, subtype) {
   # overwrite default runtype settings and LPJmL version for
   # (1) add-on tag in version argument - implemented add-ons:
   #  * `+scen_<scenname>(_<runtype>)`  - change runtype setting
-  #  * `+nocchist<year>`               - see above (cfg$nocchistYear)
+  #  * `+nocchist`                     - see above (cfg$nocchist)
 
   if (grepl("\\+scen", lpjmlversion)) {
 

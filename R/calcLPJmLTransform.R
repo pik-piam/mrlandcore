@@ -153,13 +153,13 @@ calcLPJmLTransform <- function(lpjmlversion = "lpjml5.10.0-m4",
   }
   ########## STAGE HANDELING STOP  ###############
 
-  # add-on `+nocchist<year>`: smoothed data held constant from <year> on
+  # add-on `+nocchist`: smoothed data held constant from the end of the climate harmonization on
   # (raw data would repeat the weather of one year; functions using raw data handle the add-on themselves)
-  if (!is.null(cfg$nocchistYear)) {
+  if (isTRUE(cfg$nocchist)) {
     if (!grepl("smoothed", stage)) {
       stop("Add-on +nocchist is only possible for smoothed data.")
     }
-    x <- toolFreezeEffect(x, year = cfg$nocchistYear)
+    x <- toolFreezeEffect(x, year = as.integer(sub("y", "", toolLPJmLDefault(suppressNote = TRUE)$refYearGcm)))
   }
 
   # Define minimum threshold for returned data
