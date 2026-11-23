@@ -13,16 +13,16 @@
 
 toolClimateInputVersion <- function(lpjmlVersion, climatetype) {
 
-  cfgLPJmL <- toolLPJmLVersion(lpjmlVersion, climatetype)
+  cfgLPJmL <- toolLPJmLDefault(suppressNote = TRUE)
   cfg      <- NULL
 
   ##### DEFAULT CLIMATE CONFIG #####
-  cfg$versionScen   <- "ISIMIP3bv2"
-  cfg$versionHist   <- "ISIMIP3av2"
-  cfg$baselineHist  <- cfgLPJmL$baseline_hist
-  cfg$refYearHist   <- cfgLPJmL$ref_year_hist
-  cfg$baselineGcm   <- cfgLPJmL$baseline_gcm
-  cfg$refYearGcm    <- cfgLPJmL$ref_year_gcm
+  cfg$versionScen   <- cfgLPJmL$climateInputScen
+  cfg$versionHist   <- cfgLPJmL$climateInputHist
+  cfg$baselineHist  <- cfgLPJmL$baselineHist
+  cfg$refYearHist   <- cfgLPJmL$refYearHist
+  cfg$baselineGcm   <- cfgLPJmL$baselineGcm
+  cfg$refYearGcm    <- cfgLPJmL$refYearGcm
   cfg$climatetype   <- climatetype
   ##### DEFAULT  CLIMATE CONFIG #####
 

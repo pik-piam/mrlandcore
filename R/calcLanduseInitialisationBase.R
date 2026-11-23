@@ -4,7 +4,6 @@
 #' returns the data set in a basic configuration. Use \code{\link{calcLanduseInitialisation}} for
 #' more settings.
 #'
-#' @param cells "magpiecell" for 59199 cells or "lpjcell" for 67420 cells
 #' @param selectyears Years to be computed
 #' @return Cellular landuse initialisation in its base configuration
 #' @author Jan Philipp Dietrich, Benjamin Leon Bodirsky, Kristine Karstens, Felcitas Beier, Patrick v. Jeetze
@@ -12,7 +11,7 @@
 #' \dontrun{
 #' calcOutput("LanduseInitialisationBase")
 #' }
-calcLanduseInitialisationBase <- function(cells = "lpjcell", selectyears = "past_til2020") {
+calcLanduseInitialisationBase <- function(selectyears = "past_til2020") {
 
   selectyears <- sort(findset(selectyears, noset = "original"))
   selectyears <- as.integer(gsub("y", "", selectyears))
@@ -84,9 +83,14 @@ calcLanduseInitialisationBase <- function(cells = "lpjcell", selectyears = "past
                                fill = 0, verbosity = 2)
   natTarget <- .natureTarget(luCountry, forestArea)
 
-  vegC  <- calcOutput("LPJmL_new", subtype = "vegc", stage = "smoothed",
-                      version = "LPJmL4_for_MAgPIE_44ac93de", climatetype = "GSWP3-W5E5:historical",
-                      aggregate = FALSE)
+  cfg <- toolLPJmLDefault(suppressNote = TRUE)
+
+  vegC  <- calcOutput("LPJmLTransform",
+                      lpjmlversion = cfg$defaultLPJmLVersion,
+                      climatetype  = cfg$baselineGcm,
+                      subtype      = "pnv:vegc",
+                      monthly      = FALSE,
+                      aggregate    = FALSE)
 
   vegC <- toolFillYears(vegC, getYears(luh))
 
@@ -116,10 +120,6 @@ calcLanduseInitialisationBase <- function(cells = "lpjcell", selectyears = "past
   }
 
   out <- .splitOther(lu2, luh)
-
-  if (cells == "magpiecell") {
-    out <- toolCoord2Isocell(out, cells = cells)
-  }
 
   if (any(out < 0)) {
     if (min(out) < -10e-6) {

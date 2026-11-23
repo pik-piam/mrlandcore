@@ -1,5 +1,6 @@
 #' @title       calcMultipleCroppingZones
-#' @description This function returns multiple cropping zones at 0.5 degree resolution
+#' @description This function returns multiple cropping zones from GAEZ
+#'              at 0.5 degree resolution
 #'
 #' @param layers 8 for original GAEZ layers,
 #'               3 for aggregated multiple cropping zones with

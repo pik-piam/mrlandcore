@@ -23,6 +23,19 @@ calcMulticropping <- function(irrigation = TRUE) {
 
   out[is.na(out)] <- 1
 
+  # a factor below 1 means that less area is harvested than the physical area of that
+  # cell, which should not happen with fallow land being excluded from the croparea
+  lowFactor <- out < 1
+  if (any(lowFactor)) {
+    lowArea <- dimSums(phys * lowFactor, dim = c(1, 3), na.rm = TRUE)
+    stop("In calcMulticropping: Multicropping factor below 1 on ",
+         round(max(lowArea), digits = 1),
+         " Mha of physical cropland in ",
+         getItems(lowArea, dim = 2)[which.max(as.vector(lowArea))],
+         ". This should not happen on croparea excluding fallow land, please check the ",
+         "croparea data.")
+  }
+
   out  <- toolHoldConstantBeyondEnd(out)
   phys <- toolHoldConstantBeyondEnd(phys)
 
