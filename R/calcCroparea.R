@@ -1,10 +1,15 @@
 #' @title calcCroparea
-#' @description returns croparea
+#' @description returns croparea. For datasource LandInG, physical croparea
+#'              is kept as reported by LandInG and only scaled down in cells
+#'              where it exceeds the cropland of calcLanduseInitialisation.
+#'              Fallow land is the residual between this cropland and croparea,
+#'              so that croparea plus fallow land matches calcLanduseInitialisation.
 #'
 #' @param sectoral    "kcr" MAgPIE items, and "lpj" LPJmL items
 #' @param physical    if TRUE it returns the physical area, with cropareas of multicropping systems being
 #'                    scaled to match physical areas, if FALSE the area harvested is returned
 #' @param fallow      if TRUE fallow land is returned as element in crop set
+#'                    (residual between calcLanduseInitialisation cropland and croparea)
 #' @param cellular    if TRUE: calculates cellular MAgPIE crop area for all magpie croptypes.
 #'                    Crop area from LUH3 crop types (c3ann, c4ann, c3per, c4per, cnfx)
 #'                    are mapped to MAgpIE crop types using "FAO2LUH2MAG_croptypes" and doing
@@ -78,46 +83,34 @@ calcCroparea <- function(sectoral = "kcr", physical = TRUE, fallow = FALSE,
 
       }
 
-      fallowLand   <- calcOutput("FallowLandInG", cellular = TRUE,
-                                 aggregate = FALSE)
-
-      if (!any(grepl("y2020", getItems(fallowLand, dim = 2)))) {
-        fallowLand <- toolHoldConstant(fallowLand, years = selectyears)
-      }
-
-      ### Integrate fallow into physical land
-      # implicit assumption: fallow is the same in physical and harvested area,
-      # as multicropping with fallow is not multicropping
-
-      fallowLand <- setNames(fallowLand[, selectyears, ], "fallow")
-
-      totalCroparea <- dimSums(croparea, dim = "crop")
-      irrigationShare     <- (totalCroparea[, , c("rainfed", "irrigated")] /
-                                dimSums(totalCroparea, dim = "irrigation"))
-      irrigationShare <- ifelse(is.nan(irrigationShare), 0, irrigationShare)
-      fallowLandIrrigated <- irrigationShare * fallowLand
-
-      cropareaWithFallow <- mbind(croparea, fallowLandIrrigated)
-
       ### Correction to match LanduseInitialisation cropland area
-
-      # calculate area shares
-      cropareaShareGrid <- cropareaWithFallow / dimSums(cropareaWithFallow, dim = c("irrigation", "crop"))
-      cropareaShareIso <- dimSums(cropareaWithFallow, dim = c("x", "y")) /
-        dimSums(cropareaWithFallow, dim = c("x", "y", "irrigation", "crop"))
-      cropareaShareGlo <- dimSums(cropareaWithFallow, dim = 1) /
-        dimSums(cropareaWithFallow, dim = c("x", "y", "iso", "irrigation", "crop"))
-      cropareaShareIso <- ifelse(is.nan(cropareaShareIso), cropareaShareGlo, cropareaShareIso)
-      cropareaShareGrid <- ifelse(is.nan(cropareaShareGrid), cropareaShareIso, cropareaShareGrid)
-
-      # for correction: read LanduseInitialisation cropland area
       landuseIni <- calcOutput(type = "LanduseInitialisation", aggregate = FALSE,
                                cellular = TRUE, selectyears = selectyears)
+      landuseIniCrop <- collapseNames(landuseIni[, , "crop"])
 
-      landuseIniCrop    <- collapseNames(landuseIni[, , "crop"])
+      # Croparea is kept as reported by LandInG (consistent with FAO harvested area)
+      # and only scaled down where it exceeds LanduseInitialisation cropland
+      totalCrops <- dimSums(croparea, dim = c("crop", "irrigation"))
+      scaling    <- ifelse(totalCrops > landuseIniCrop,
+                            landuseIniCrop / totalCrops,
+                           1)
+      croparea   <- croparea * scaling
 
-      # rescale
-      cropareaCalibrated <- cropareaShareGrid * landuseIniCrop
+      # Fallow land is the residual to LanduseInitialisation cropland
+      # implicit assumption: fallow is the same in physical and harvested area,
+      # as multicropping and fallow cannot coexist in the same grid cell.
+      fallowLand <- landuseIniCrop - dimSums(croparea, dim = c("crop", "irrigation"))
+      fallowLand[fallowLand < 0] <- 0
+      fallowLand <- setNames(fallowLand, "fallow")
+
+      # split fallow by irrigation share of croparea (rainfed where there is no croparea)
+      totalCroparea   <- dimSums(croparea, dim = "crop")
+      irrigationShare <- (totalCroparea[, , c("rainfed", "irrigated")] /
+                            dimSums(totalCroparea, dim = "irrigation"))
+      irrigationShare <- ifelse(is.nan(irrigationShare), 0, irrigationShare)
+      irrigationShare[, , "rainfed"] <- 1 - collapseNames(irrigationShare[, , "irrigated"])
+
+      cropareaCalibrated <- mbind(croparea, irrigationShare * fallowLand)
 
       ### Check physical cropland matching ###
       # Sanity check (physical croparea + fallow land should match total cropland

@@ -19,7 +19,8 @@ calcCroparea(
 \item{physical}{if TRUE it returns the physical area, with cropareas of multicropping systems being
 scaled to match physical areas, if FALSE the area harvested is returned}
 
-\item{fallow}{if TRUE fallow land is returned as element in crop set}
+\item{fallow}{if TRUE fallow land is returned as element in crop set
+(residual between calcLanduseInitialisation cropland and croparea)}
 
 \item{cellular}{if TRUE: calculates cellular MAgPIE crop area for all magpie croptypes.
 Crop area from LUH3 crop types (c3ann, c4ann, c3per, c4per, cnfx)
@@ -38,7 +39,11 @@ backwards compatibility.}
 areas of individual crops from FAOSTAT and weight
 }
 \description{
-returns croparea
+returns croparea. For datasource LandInG, physical croparea
+             is kept as reported by LandInG and only scaled down in cells
+             where it exceeds the cropland of calcLanduseInitialisation.
+             Fallow land is the residual between this cropland and croparea,
+             so that croparea plus fallow land matches calcLanduseInitialisation.
 }
 \author{
 Felicitas Beier, Benjamin Leon Bodirsky
