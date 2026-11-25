@@ -1,8 +1,7 @@
 #' @title calcFallow
-#' @description Returns fallow land calculated based on physical cropland extent
-#'              and harvested area output of default croparea datasource.
-#'              The resultant areas are scaled to match the land croparea land
-#'              class of calcLanduseInitialisation.
+#' @description Returns fallow land as calculated in calcCroparea:
+#'              the residual between cropland of calcLanduseInitialisation
+#'              and physical croparea.
 #' @param cellular TRUE for cellular outputs
 #' @return MAgPIE object containing fallow land in Mha
 #' @author David Hoetten, Felicitas Beier, Benjamin Bodirsky

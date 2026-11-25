@@ -13,10 +13,9 @@ calcFallow(cellular = FALSE)
 MAgPIE object containing fallow land in Mha
 }
 \description{
-Returns fallow land calculated based on physical cropland extent
-             and harvested area output of default croparea datasource.
-             The resultant areas are scaled to match the land croparea land
-             class of calcLanduseInitialisation.
+Returns fallow land as calculated in calcCroparea:
+             the residual between cropland of calcLanduseInitialisation
+             and physical croparea (LandInG).
 }
 \examples{
 \dontrun{
